@@ -45,7 +45,6 @@
       <div class="cards">
         <div class="card"><div class="v">${c.imc ?? "–"}</div><div class="k">IMC actuel</div></div>
         <div class="card"><div class="v accent">&minus;${c.aPerdre ?? "–"} kg</div><div class="k">Votre objectif</div></div>
-        <div class="card"><div class="v">${c.pReco ?? "–"} kg</div><div class="k">Poids d'équilibre</div></div>
       </div>
       <div class="rea-note">${objectifOk
         ? `<strong>Bonne nouvelle :</strong> votre objectif de ${ctx.esc(ctx.state.answers.poids_ideal)} kg est cohérent avec votre profil. Avec la bonne méthode, il est atteignable durablement, sans frustration.`
@@ -56,12 +55,15 @@
   }
 
   function renderRea2(ctx) {
+    const age40 = (Number(ctx.state.answers.age) || 0) >= 40;
     ctx.app.innerHTML = `
       <div class="rea-icon">🧠</div>
       <div class="eyebrow">Ce que les régimes ignorent</div>
       <h1>Ce n'est pas un manque de <em>volonté</em></h1>
       <div class="rea-note" style="margin-bottom:14px">
-        Après 40 ans, les <strong>changements hormonaux</strong> modifient la façon dont votre corps stocke et brûle les calories. Et vos envies de grignoter ne viennent pas de votre volonté : elles viennent d'<strong>automatismes inconscients</strong> installés depuis des années.
+        ${age40
+          ? `Après 40 ans, les <strong>changements hormonaux</strong> modifient la façon dont votre corps stocke et brûle les calories. Et vos envies de grignoter ne viennent pas de votre volonté : elles viennent d'<strong>automatismes inconscients</strong> installés depuis des années.`
+          : `Vos envies de grignoter ne viennent pas de votre volonté : elles viennent d'<strong>automatismes inconscients</strong> installés depuis des années. Votre cerveau a appris à associer émotions et nourriture, et il rejoue ce programme sans vous demander votre avis.`}
       </div>
       <div class="rea-note">
         C'est exactement pour cela que les régimes échouent : ils s'attaquent à l'assiette, jamais à ce qui se passe dans votre tête. <strong>L'autohypnose agit là où tout se joue.</strong>
