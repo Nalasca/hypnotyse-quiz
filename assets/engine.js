@@ -316,8 +316,59 @@ function renderEmail() {
       completed_at: new Date().toISOString()
     }, QUIZ.completionFields(state)));
 
-    setTimeout(() => { location.href = target; }, 900);
+    renderProcessing(target);
   });
+}
+
+/* ---------- Écran de processing avant la redirection ---------- */
+function renderProcessing(target) {
+  const steps = QUIZ.processingSteps || [
+    { ico:"🔍", lbl:"Analyse des réponses" },
+    { ico:"🧠", lbl:"Identification des schémas émotionnels" },
+    { ico:"📊", lbl:"Matching avec des profils similaires" },
+    { ico:"🎯", lbl:"Calcul de votre trajectoire personnalisée" },
+    { ico:"✨", lbl:"Sélection de vos séances prioritaires" }
+  ];
+  document.body.classList.add("processing");
+  btnBack.classList.remove("visible");
+  window.scrollTo(0,0);
+  app.className = "screen active";
+  const R = 54, CIRC = 2 * Math.PI * R;
+  app.innerHTML = `
+    <div class="proc">
+      <div class="proc-ring">
+        <svg viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="${R}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="6"/>
+          <circle id="procArc" cx="60" cy="60" r="${R}" fill="none" stroke="#7FC4A6" stroke-width="6"
+            stroke-linecap="round" stroke-dasharray="${CIRC}" stroke-dashoffset="${CIRC}"/>
+        </svg>
+        <div class="pct" id="procPct">0%</div>
+      </div>
+      <h1>Analyse de votre <em>profil en cours</em></h1>
+      <div class="sub">Veuillez patienter quelques secondes.<br>Vos résultats sont en cours de génération.</div>
+      <div class="proc-steps">
+        ${steps.map(s => `<div class="proc-step"><span class="ico">${s.ico}</span><span class="lbl">${s.lbl}${s.sub ? `<small>${s.sub}</small>` : ""}</span><span class="tick">✓</span></div>`).join("")}
+      </div>
+    </div>`;
+  const arc = document.getElementById("procArc");
+  const pctEl = document.getElementById("procPct");
+  const els = [...document.querySelectorAll(".proc-step")];
+  const DURATION = 7500;
+  const t0 = performance.now();
+  function frame(now) {
+    const t = Math.min(1, (now - t0) / DURATION);
+    const eased = 1 - Math.pow(1 - t, 1.6);
+    pctEl.textContent = Math.round(eased * 100) + "%";
+    arc.style.strokeDashoffset = CIRC * (1 - eased);
+    const seg = eased * steps.length;
+    els.forEach((el, i) => {
+      el.classList.toggle("done", seg >= i + 1);
+      el.classList.toggle("active", seg >= i && seg < i + 1);
+    });
+    if (t < 1) requestAnimationFrame(frame);
+    else setTimeout(() => { location.href = target; }, 450);
+  }
+  requestAnimationFrame(frame);
 }
 
 /* ---------- Init : chargement config puis démarrage ---------- */

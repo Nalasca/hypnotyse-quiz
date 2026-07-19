@@ -256,6 +256,15 @@
     totalQuestions: 16,
     steps: STEPS,
 
+    /* Écran de processing affiché après la capture email, avant la redirection */
+    processingSteps: [
+      { ico:"🔍", lbl:"Analyse des réponses" },
+      { ico:"🧠", lbl:"Identification des schémas émotionnels" },
+      { ico:"📊", lbl:"Matching avec des profils similaires" },
+      { ico:"🎯", lbl:"Calcul de votre trajectoire personnalisée", sub:"Objectif, durée estimée, taux de réussite" },
+      { ico:"✨", lbl:"Sélection de vos séances prioritaires", sub:"Adaptées à votre rythme et vos moments d'écoute" }
+    ],
+
     /* Colonnes promues au moment de la complétion (en plus de prenom, email,
        redirect_url et completed_at gérés par le moteur) */
     completionFields(state) {
