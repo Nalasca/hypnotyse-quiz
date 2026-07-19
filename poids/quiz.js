@@ -274,26 +274,6 @@
         score_emotionnel: scoreEmotionnel(state),
         moment_ecoute: state.answers.moment_ecoute || null
       };
-    },
-
-    /* Paramètres de personnalisation de la page de vente
-       (sid, prenom et fbclid sont ajoutés par le moteur) */
-    redirectParams(state) {
-      const c = calc(state);
-      return {
-        sexe: state.answers.sexe ?? "",
-        poids: state.answers.poids_actuel ?? "",
-        ideal: state.answers.poids_ideal ?? "",
-        aperdre: c.aPerdre ?? "",
-        imc: c.imc ?? "",
-        reco: c.pReco ?? "",
-        morpho: state.answers.morphotype ?? "",
-        duree: state.answers.duree_tentative ?? "",
-        vie: ([].concat(state.answers.objectif_vie || []))[0] ?? "",
-        obstacle: state.answers.obstacle_percu ?? "",
-        score: scoreEmotionnel(state),
-        moment: state.answers.moment_ecoute ?? ""
-      };
     }
   };
 })();

@@ -299,11 +299,11 @@ function renderEmail() {
 
     state.answers.prenom = prenom; state.answers.email = email;
 
-    /* URL de résultats : clé spécifique au quiz si présente, sinon clé globale */
+    /* URL de résultats : clé spécifique au quiz si présente, sinon clé globale.
+       Seuls sid, prenom et fbclid passent dans l'URL : la page de résultats
+       récupère les réponses via la RPC quiz_get(sid). */
     const base = CONFIG["redirect_url_results_" + QUIZ.type] || CONFIG.redirect_url_results;
-    const r = new URLSearchParams(QUIZ.redirectParams(state));
-    r.set("sid", sessionId);
-    r.set("prenom", prenom);
+    const r = new URLSearchParams({ sid: sessionId, prenom: prenom });
     if (fbclid) r.set("fbclid", fbclid);
     const target = base + "?" + r.toString();
 

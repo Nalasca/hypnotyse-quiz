@@ -46,7 +46,7 @@ Ce quiz remplace l'ancien formulaire Tally. Objectifs : s'affranchir de l'abonne
 - session_id UUID généré côté client, persisté en localStorage (`hy_quiz_session_poids`, une clé par quiz_type) seulement après le premier enregistrement réussi ; retente à chaque réponse sinon
 - fbclid capturé depuis l'URL, persisté en localStorage (`hy_fbclid`), repassé à la redirection
 - Pixel : PageView à l'init si pixel_id renseigné, QuizStart custom au premier clic, Lead avec eventID = session_id à la capture email (déduplication CAPI)
-- Redirection finale vers redirect_url_results avec : sid, prenom, sexe, poids, ideal, aperdre, imc, reco, morpho, duree, vie, obstacle, score, moment, fbclid. La même URL est stockée en colonne `redirect_url` et part dans le webhook.
+- Redirection finale vers redirect_url_results avec uniquement : sid, prenom, fbclid. La page de résultats récupère les réponses via la RPC `quiz_get(p_id uuid)` (security definer, renvoie les champs de personnalisation en jsonb, jamais l'email ni le tracking). La même URL est stockée en colonne `redirect_url` et part dans le webhook.
 - Question schizophrénie/troubles psychiques sortie du parcours : mention légale sous le formulaire email
 - Copie sans termes interdits Meta (pas de "ménopause", dire "changements hormonaux" ; pas de promesse chiffrée de perte de poids)
 
