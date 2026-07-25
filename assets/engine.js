@@ -23,8 +23,20 @@ let CONFIG = {
 
 /* ---------- Session & tracking ---------- */
 const params = new URLSearchParams(location.search);
-const fbclid = params.get("fbclid") || localStorage.getItem("hy_fbclid") || null;
-if (params.get("fbclid")) localStorage.setItem("hy_fbclid", params.get("fbclid"));
+
+/* Identifiants de clic publicitaire. Captés depuis l'URL (la landing doit les
+   transmettre au lien vers le quiz), persistés en localStorage pour survivre à
+   un retour plus tard, enregistrés en base et poussés en dataLayer à la
+   complétion. gbraid/wbraid remplacent gclid sur iOS et selon le consentement. */
+const CLICK_IDS = ["fbclid", "gclid", "gbraid", "wbraid"];
+const clickIds = {};
+CLICK_IDS.forEach(k => {
+  const fromUrl = params.get(k);
+  if (fromUrl) localStorage.setItem("hy_" + k, fromUrl);
+  const v = fromUrl || localStorage.getItem("hy_" + k);
+  if (v) clickIds[k] = v;
+});
+const fbclid = clickIds.fbclid || null;
 
 const SESSION_STORAGE_KEY = "hy_quiz_session_" + QUIZ.type;
 let sessionId = localStorage.getItem(SESSION_STORAGE_KEY);
@@ -60,15 +72,14 @@ function sbSave(fields) {
 async function ensureSession() {
   if (sessionCreated) return;
   try {
-    const res = await sbSave({
+    const res = await sbSave(Object.assign({
       quiz_type: QUIZ.type,
-      fbclid: fbclid,
       utm_source: params.get("utm_source"),
       utm_medium: params.get("utm_medium"),
       utm_campaign: params.get("utm_campaign"),
       utm_content: params.get("utm_content"),
       landing_variant: params.get("lp") || null
-    });
+    }, clickIds));
     if (res.ok) {
       sessionCreated = true;
       localStorage.setItem(SESSION_STORAGE_KEY, sessionId);
@@ -350,7 +361,7 @@ function renderEmail() {
     const target = base + "?" + r.toString();
 
     trackLead();
-    dlPush("quiz_complete", { email: email, telephone: telephone, prenom: prenom });
+    dlPush("quiz_complete", Object.assign({ email: email, telephone: telephone, prenom: prenom }, clickIds));
     /* completed_at déclenche côté Supabase le webhook (table quiz_config, clé webhook_url)
        qui reçoit toute la ligne, redirect_url comprise */
     saveProgress(Object.assign({
