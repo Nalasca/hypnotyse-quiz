@@ -52,6 +52,14 @@ Ce quiz remplace l'ancien formulaire Tally. Objectifs : s'affranchir de l'abonne
 - Question schizophrénie/troubles psychiques sortie du parcours : mention légale sous le formulaire email
 - Copie sans termes interdits Meta (pas de "ménopause", dire "changements hormonaux" ; pas de promesse chiffrée de perte de poids)
 
+## Consentement (RGPD)
+
+- `gtm/consent-banner.html` : bandeau Hypnotyse + Google Consent Mode v2, à coller dans GTM en HTML personnalisé sur le déclencheur **Initialisation du consentement - Toutes les pages** (pas dans les pages en dur). Pose un cookie `hy_consent` sur `.hypnotyse.com`, donc un seul affichage pour tout le tunnel (LP, diag., app.).
+- Tout est refusé par défaut, `ads_data_redaction` et `url_passthrough` activés (le gclid continue de passer par l'URL même sans cookie). Boutons accepter/refuser de poids visuel égal (exigence CNIL), panneau granulaire mesure d'audience / publicité, réouverture via `hyConsent.open()`.
+- Le moteur lit ce cookie à chaque enregistrement et le stocke en colonne `consent_ads`. **n8n ne doit pousser la CAPI Meta et l'import de conversions hors ligne Google Ads que si `consent_ads` est true** : le passage en serveur ne contourne pas le consentement.
+- L'enregistrement des réponses dans Supabase n'est pas conditionné au consentement (nécessaire au service demandé), le quiz fonctionne donc même si tout est refusé.
+- Pas de CMP certifiée nécessaire : cette obligation vise les éditeurs (AdSense, Ad Manager), pas les annonceurs.
+
 ## Design system Hypnotyse
 
 Couleurs : forest #1E3A2F, green #2E7D5E, light green #7FC4A6, fond vert #E8F2EE, cream #F7F3ED, texte #1A2E24, muted #4A5E54, labels #8A9E96, red #C44A3A, orange #C8784A, gold #E8A020. Fonts : Cormorant Garamond (titres, italique pour les mots accentués), Inter (corps et chiffres). Mobile-first, max-width 720px, body 16px minimum, titres 28px+ sur mobile. Jamais de tiret cadratin dans les textes.

@@ -38,6 +38,16 @@ CLICK_IDS.forEach(k => {
 });
 const fbclid = clickIds.fbclid || null;
 
+/* Consentement publicitaire, lu à chaque enregistrement depuis le cookie posé
+   par le bandeau GTM (domaine .hypnotyse.com, partagé par tout le tunnel).
+   null = aucun choix exprimé. Garde-fou pour n8n : ne pousser la CAPI Meta et
+   les conversions hors ligne Google Ads que si true. */
+function readConsentAds() {
+  const m = document.cookie.match(/(?:^|;\s*)hy_consent=([^;]*)/);
+  if (!m) return null;
+  try { return !!JSON.parse(decodeURIComponent(m[1])).ads; } catch(e) { return null; }
+}
+
 const SESSION_STORAGE_KEY = "hy_quiz_session_" + QUIZ.type;
 let sessionId = localStorage.getItem(SESSION_STORAGE_KEY);
 let sessionCreated = !!sessionId;
@@ -87,11 +97,16 @@ async function ensureSession() {
   } catch(e) { /* silencieux, ne bloque jamais la personne */ }
 }
 
+/* Les identifiants de clic et le consentement repartent à chaque enregistrement :
+   une session déjà présente en localStorage (visite précédente) doit tout de même
+   recevoir l'attribution du nouveau clic, et le consentement peut changer en cours
+   de route. quiz_save ignore les valeurs nulles, rien n'est jamais écrasé à vide. */
 function saveProgress(extraFields) {
   const body = Object.assign({
     current_step: state.stepIndex,
-    answers: state.answers
-  }, extraFields || {});
+    answers: state.answers,
+    consent_ads: readConsentAds()
+  }, clickIds, extraFields || {});
   try { sbSave(body); } catch(e) { /* silencieux */ }
 }
 

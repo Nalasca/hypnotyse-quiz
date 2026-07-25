@@ -1,0 +1,175 @@
+<!--
+  Bandeau de consentement Hypnotyse + Google Consent Mode v2
+
+  À COLLER DANS GTM, PAS DANS LES PAGES :
+    Balises > Nouvelle > HTML personnalisé
+    Nom     : Consentement - Bandeau Hypnotyse
+    Déclencheur : Initialisation du consentement - Toutes les pages
+                  (déclencheur spécial, garanti avant tous les autres tags)
+
+  Le cookie hy_consent est posé sur .hypnotyse.com : le choix fait sur la
+  landing suit le visiteur jusqu'au quiz (diag.) et à la page de vente (app.),
+  le bandeau ne s'affiche donc qu'une fois pour tout le tunnel.
+
+  Pour rouvrir le choix depuis un lien de pied de page :
+    <a href="#" onclick="hyConsent.open();return false">Gérer mes cookies</a>
+-->
+<script>
+(function(){
+  var COOKIE = "hy_consent", DOMAIN = ".hypnotyse.com", MOIS = 6;
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+
+  function lire(){
+    var m = document.cookie.match(/(?:^|;\s*)hy_consent=([^;]*)/);
+    if (!m) return null;
+    try { return JSON.parse(decodeURIComponent(m[1])); } catch(e) { return null; }
+  }
+  function ecrire(etat){
+    etat.ts = new Date().toISOString();
+    var exp = new Date(Date.now() + MOIS*30*864e5).toUTCString();
+    var base = COOKIE + "=" + encodeURIComponent(JSON.stringify(etat)) +
+      ";expires=" + exp + ";path=/;SameSite=Lax";
+    /* Cookie partagé entre les sous-domaines du tunnel (diag., app., www.).
+       Si le domaine ne correspond pas (préproduction, localhost), le navigateur
+       ignore l'écriture : on retombe alors sur le domaine courant. */
+    document.cookie = base + ";domain=" + DOMAIN;
+    if (!lire()) document.cookie = base;
+  }
+
+  function appliquer(etat, mode){
+    gtag('consent', mode, {
+      ad_storage:             etat.ads ? 'granted' : 'denied',
+      ad_user_data:           etat.ads ? 'granted' : 'denied',
+      ad_personalization:     etat.ads ? 'granted' : 'denied',
+      analytics_storage:      etat.analytics ? 'granted' : 'denied',
+      functionality_storage:  'granted',
+      personalization_storage: etat.analytics ? 'granted' : 'denied',
+      security_storage:       'granted'
+    });
+  }
+
+  /* 1. État par défaut : tout refusé, AVANT que le moindre tag ne parte.
+        wait_for_update laisse le temps au choix déjà enregistré d'arriver. */
+  gtag('consent', 'default', {
+    ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied',
+    analytics_storage: 'denied', personalization_storage: 'denied',
+    functionality_storage: 'granted', security_storage: 'granted',
+    wait_for_update: 500
+  });
+  /* Sans cookie publicitaire, Google transmet quand même le gclid dans l'URL
+     et n'envoie pas d'identifiants : indispensable pour notre tunnel. */
+  gtag('set', 'ads_data_redaction', true);
+  gtag('set', 'url_passthrough', true);
+
+  function notifier(etat){
+    dataLayer.push({
+      event: 'hy_consent_update',
+      consent_ads: !!etat.ads,
+      consent_analytics: !!etat.analytics
+    });
+  }
+
+  /* 2. Choix déjà exprimé : on le rejoue et on n'affiche rien. */
+  var deja = lire();
+  if (deja) { appliquer(deja, 'update'); notifier(deja); }
+
+  /* 3. Bandeau */
+  var CSS = ''
+    + '#hyc{position:fixed;left:0;right:0;bottom:0;z-index:2147483000;background:#F7F3ED;'
+    + 'border-top:1px solid #E5E0D7;box-shadow:0 -6px 28px rgba(30,58,47,.13);'
+    + 'font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#1A2E24;'
+    + 'padding:20px;animation:hycUp .3s ease both}'
+    + '@keyframes hycUp{from{transform:translateY(100%)}to{transform:none}}'
+    + '@media(prefers-reduced-motion:reduce){#hyc{animation:none}}'
+    + '#hyc *{box-sizing:border-box}'
+    + '#hyc .in{max-width:720px;margin:0 auto}'
+    + '#hyc h2{font-family:"Cormorant Garamond",Georgia,serif;font-size:21px;font-weight:600;'
+    + 'color:#1E3A2F;margin:0 0 7px;line-height:1.25}'
+    + '#hyc p{font-size:14px;line-height:1.55;color:#4A5E54;margin:0 0 15px}'
+    + '#hyc .btns{display:flex;gap:10px;flex-wrap:wrap}'
+    + '#hyc button{flex:1 1 150px;min-height:48px;padding:13px 16px;border-radius:12px;'
+    + 'font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;border:1.5px solid #1E3A2F;'
+    + 'transition:opacity .15s,transform .1s}'
+    + '#hyc button:active{transform:scale(.985)}'
+    + '#hyc .ok{background:#1E3A2F;color:#fff}'
+    + '#hyc .no{background:transparent;color:#1E3A2F}'
+    + '#hyc .lnk{background:none;border:none;flex:0 0 auto;min-height:0;padding:9px 2px;'
+    + 'font-size:13.5px;font-weight:500;color:#4A5E54;text-decoration:underline}'
+    + '#hyc .cats{display:none;margin:4px 0 15px;border-top:1px solid #E5E0D7;padding-top:13px}'
+    + '#hyc .cats.on{display:block}'
+    + '#hyc .cat{display:flex;gap:12px;align-items:flex-start;padding:9px 0;font-size:14px}'
+    + '#hyc .cat input{width:19px;height:19px;margin-top:2px;accent-color:#2E7D5E;flex-shrink:0}'
+    + '#hyc .cat b{display:block;font-weight:600;font-size:14.5px;margin-bottom:2px}'
+    + '#hyc .cat span{color:#4A5E54;line-height:1.45}';
+
+  var el = null;
+
+  function fermer(){
+    if (!el) return;
+    el.remove(); el = null;
+    document.body.style.paddingBottom = "";
+  }
+
+  function ouvrir(){
+    if (el) return;
+    var etat = lire() || { ads:false, analytics:false };
+
+    if (!document.getElementById("hyc-css")) {
+      var st = document.createElement("style");
+      st.id = "hyc-css"; st.textContent = CSS;
+      document.head.appendChild(st);
+    }
+
+    el = document.createElement("div");
+    el.id = "hyc";
+    el.setAttribute("role", "dialog");
+    el.setAttribute("aria-label", "Gestion du consentement");
+    el.innerHTML = ''
+      + '<div class="in">'
+      + '<h2>Votre confidentialité</h2>'
+      + '<p>Nous utilisons des cookies pour mesurer notre audience et vous proposer '
+      + 'des contenus adaptés. Vous restez libre de refuser, cela ne change rien à '
+      + 'votre bilan ni à son résultat.</p>'
+      + '<div class="cats" id="hycCats">'
+      +   '<label class="cat"><input type="checkbox" id="hycA"' + (etat.analytics ? ' checked' : '') + '>'
+      +   '<span><b>Mesure d\'audience</b>Comprendre comment le site est utilisé pour l\'améliorer.</span></label>'
+      +   '<label class="cat"><input type="checkbox" id="hycP"' + (etat.ads ? ' checked' : '') + '>'
+      +   '<span><b>Publicité</b>Mesurer nos campagnes et éviter de vous montrer des annonces hors sujet.</span></label>'
+      + '</div>'
+      + '<div class="btns">'
+      +   '<button type="button" class="ok" id="hycOk">Tout accepter</button>'
+      +   '<button type="button" class="no" id="hycNo">Tout refuser</button>'
+      +   '<button type="button" class="lnk" id="hycSet">Personnaliser</button>'
+      + '</div>'
+      + '</div>';
+    document.body.appendChild(el);
+    document.body.style.paddingBottom = el.offsetHeight + "px";
+
+    function valider(etat){
+      ecrire(etat); appliquer(etat, 'update'); notifier(etat); fermer();
+    }
+    document.getElementById("hycOk").onclick = function(){ valider({ ads:true, analytics:true }); };
+    document.getElementById("hycNo").onclick = function(){ valider({ ads:false, analytics:false }); };
+    document.getElementById("hycSet").onclick = function(){
+      var cats = document.getElementById("hycCats");
+      var ouvert = cats.classList.toggle("on");
+      this.textContent = ouvert ? "Enregistrer mes choix" : "Personnaliser";
+      document.body.style.paddingBottom = el.offsetHeight + "px";
+      if (!ouvert) valider({
+        ads: document.getElementById("hycP").checked,
+        analytics: document.getElementById("hycA").checked
+      });
+    };
+  }
+
+  /* Lien de pied de page : hyConsent.open() */
+  window.hyConsent = { open: ouvrir, etat: lire };
+
+  if (!deja) {
+    if (document.body) ouvrir();
+    else document.addEventListener("DOMContentLoaded", ouvrir);
+  }
+})();
+</script>
