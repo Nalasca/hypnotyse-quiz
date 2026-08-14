@@ -126,32 +126,27 @@
 
   /* ---------- Étapes ---------- */
   const STEPS = [
-    { id:"objectif", type:"single", q:1,
-      title:"Quel est votre <em>objectif</em> de perte de poids ?",
-      key:"objectif_kg",
-      options:["Moins de 5 kg","5 à 10 kg","10 à 15 kg","Plus de 15 kg"] },
-
-    { id:"sexe", type:"single", q:2, promote:true,
+    { id:"sexe", type:"single", q:1, promote:true,
       title:"Vous êtes…",
       sub:"Le métabolisme diffère selon le sexe. Cette information affine le calcul de votre profil.",
       key:"sexe",
       options:["Femme","Homme"] },
 
-    { id:"age", type:"number", q:3,
+    { id:"age", type:"number", q:2,
       title:"Quel est votre âge ?",
       sub:"Votre profil hormonal dépend de votre âge. Il influence directement la façon dont votre corps stocke et brûle les calories.",
       key:"age", unit:"ans", min:18, max:95, placeholder:"52", promote:true },
 
-    { id:"taille", type:"number", q:4,
+    { id:"taille", type:"number", q:3,
       title:"Quelle est votre taille ?",
       key:"taille_cm", unit:"cm", min:120, max:220, placeholder:"165", promote:true },
 
-    { id:"poids", type:"number", q:5,
+    { id:"poids", type:"number", q:4,
       title:"Quel est votre poids actuel ?",
       sub:"Cette information reste strictement confidentielle. Elle sert uniquement à calculer votre profil.",
       key:"poids_actuel", unit:"kg", min:40, max:250, decimal:true, placeholder:"72", promote:true },
 
-    { id:"ideal", type:"number", q:6,
+    { id:"ideal", type:"number", q:5,
       title:"Quel poids aimeriez-vous <em>atteindre</em> ?",
       key:"poids_ideal", unit:"kg", min:40, max:250, decimal:true, placeholder:"63", promote:true,
       validate:(v, state) => (state.answers.poids_actuel && v >= Number(state.answers.poids_actuel))
@@ -163,12 +158,12 @@
 
     { id:"rea1", type:"custom", rea:true, render:renderRea1 },
 
-    { id:"duree", type:"single", q:7, promote:true,
+    { id:"duree", type:"single", q:6, promote:true,
       title:"Depuis combien de temps essayez-vous de perdre du poids ?",
       key:"duree_tentative",
       options:["Moins de 6 mois","Entre 6 mois et 1 an","Entre 1 et 3 ans","Plus de 3 ans"] },
 
-    { id:"projection", type:"multi", q:8, max:2, promote:true,
+    { id:"projection", type:"multi", q:7, max:2, promote:true,
       title:"Une fois votre poids idéal atteint, <em>qu'est-ce qui changera</em> le plus pour vous ?",
       sub:"2 réponses maximum.",
       key:"objectif_vie",
@@ -180,7 +175,7 @@
         "Plus de confiance dans mes relations personnelles et intimes"
       ] },
 
-    { id:"obstacle", type:"single", q:9, promote:true,
+    { id:"obstacle", type:"single", q:8, promote:true,
       title:"Selon vous, qu'est-ce qui vous <em>empêche</em> aujourd'hui d'y arriver ?",
       key:"obstacle_percu",
       options:[
@@ -191,7 +186,7 @@
         "Je ne sais pas vraiment, et c'est ça le problème"
       ] },
 
-    { id:"morphotype", type:"single", q:10, morpho:true, promote:true,
+    { id:"morphotype", type:"single", q:9, morpho:true, promote:true,
       title:"Quelle silhouette vous décrit le mieux ?",
       key:"morphotype",
       options:[
@@ -203,7 +198,7 @@
         {v:"O", t:"Silhouette toute en rondeurs"}
       ] },
 
-    { id:"symptomes", type:"multi", q:11, max:6,
+    { id:"symptomes", type:"multi", q:10, max:6,
       title:"Quels symptômes ressentez-vous habituellement ?",
       sub:"Plusieurs réponses possibles.",
       key:"symptomes",
@@ -216,7 +211,7 @@
         "Aucun en particulier"
       ] },
 
-    { id:"moments", type:"multi", q:12, max:5,
+    { id:"moments", type:"multi", q:11, max:5,
       title:"À quels moments ressentez-vous le besoin de <em>grignoter</em> ?",
       sub:"Plusieurs réponses possibles.",
       key:"moments_grignotage",
@@ -230,22 +225,22 @@
 
     { id:"rea2", type:"custom", rea:true, render:renderRea2 },
 
-    { id:"sucre", type:"scale", q:13,
+    { id:"sucre", type:"scale", q:12,
       title:"« J'ai du mal à résister aux envies de sucre ou de chocolat. »",
       key:"sucre" },
 
-    { id:"stress", type:"scale", q:14,
+    { id:"stress", type:"scale", q:13,
       title:"« Je mange souvent à cause du stress, de l'ennui ou d'émotions négatives. »",
       key:"stress" },
 
-    { id:"echec", type:"scale", q:15,
+    { id:"echec", type:"scale", q:14,
       title:"« Quand je fais un écart, le sentiment d'échec me pousse à en faire encore plus. »",
       key:"echec",
       onAnswer:(v, state) => ({ score_emotionnel: scoreEmotionnel(state) }) },
 
     { id:"rea3", type:"custom", rea:true, render:renderRea3 },
 
-    { id:"rythme", type:"custom", q:16, render:renderRythme },
+    { id:"rythme", type:"custom", q:15, render:renderRythme },
 
     { id:"email", type:"email" }
   ];
@@ -253,7 +248,7 @@
   /* ---------- Définition lue par le moteur ---------- */
   window.QUIZ = {
     type: "poids",
-    totalQuestions: 16,
+    totalQuestions: 15,
     steps: STEPS,
 
     /* Écran de processing affiché après la capture email, avant la redirection */

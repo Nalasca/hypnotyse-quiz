@@ -320,18 +320,6 @@ function renderScale(step) {
   }
 }
 
-/* Numéro au format E.164 (+33612345678), attendu par les correspondances
-   avancées Meta et Google Ads. Renvoie null si le numéro est invalide. */
-function normalizeTel(raw) {
-  let v = String(raw || "").replace(/[\s.\-()\/]/g, "");
-  if (!v) return null;
-  if (v.startsWith("00")) v = "+" + v.slice(2);
-  if (v.startsWith("0") && v.length === 10) return "+33" + v.slice(1);
-  if (v.startsWith("+")) return /^\+[1-9]\d{7,14}$/.test(v) ? v : null;
-  if (/^33\d{9}$/.test(v)) return "+" + v;
-  return null;
-}
-
 /* ---------- Email + redirection vers les résultats ---------- */
 function renderEmail() {
   fill.style.width = "97%";
@@ -344,10 +332,8 @@ function renderEmail() {
       <input id="fPrenom" type="text" autocomplete="given-name" placeholder="Marie"></div>
     <div class="field"><label for="fEmail">Votre adresse email</label>
       <input id="fEmail" type="email" autocomplete="email" inputmode="email" placeholder="marie@exemple.fr"></div>
-    <div class="field"><label for="fTel">Votre numéro de téléphone</label>
-      <input id="fTel" type="tel" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78"></div>
     <label class="consent"><input type="checkbox" id="fConsent">
-      <span>J'accepte de recevoir mes résultats et les informations relatives au programme par email et par SMS.</span></label>
+      <span>J'accepte de recevoir mes résultats et les informations relatives au programme par email.</span></label>
     <div class="num-hint" id="formHint"></div>
     <button class="cta green" id="btnNext">Découvrir mes résultats</button>
     <div class="legal">Vos données restent confidentielles et ne sont jamais partagées. L'autohypnose est déconseillée aux personnes diagnostiquées avec des troubles psychotiques ou de schizophrénie. Hypnotyse ne remplace pas un avis médical.</div>`;
@@ -355,17 +341,15 @@ function renderEmail() {
   document.getElementById("btnNext").addEventListener("click", () => {
     const prenom = document.getElementById("fPrenom").value.trim();
     const email = document.getElementById("fEmail").value.trim();
-    const telephone = normalizeTel(document.getElementById("fTel").value);
     const consent = document.getElementById("fConsent").checked;
     if (!prenom) { hint.textContent = "Merci d'indiquer votre prénom."; return; }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { hint.textContent = "Merci d'indiquer une adresse email valide."; return; }
-    if (!telephone) { hint.textContent = "Merci d'indiquer un numéro de téléphone valide."; return; }
     if (!consent) { hint.textContent = "Merci de cocher la case pour recevoir vos résultats."; return; }
     hint.textContent = "";
     const btn = document.getElementById("btnNext");
     btn.disabled = true; btn.textContent = "Préparation de vos résultats…";
 
-    state.answers.prenom = prenom; state.answers.email = email; state.answers.telephone = telephone;
+    state.answers.prenom = prenom; state.answers.email = email;
 
     /* URL de résultats : clé spécifique au quiz si présente, sinon clé globale.
        Seuls sid, prenom et fbclid passent dans l'URL : la page de résultats
@@ -376,11 +360,11 @@ function renderEmail() {
     const target = base + "?" + r.toString();
 
     trackLead();
-    dlPush("quiz_complete", Object.assign({ email: email, telephone: telephone, prenom: prenom }, clickIds));
+    dlPush("quiz_complete", Object.assign({ email: email, prenom: prenom }, clickIds));
     /* completed_at déclenche côté Supabase le webhook (table quiz_config, clé webhook_url)
        qui reçoit toute la ligne, redirect_url comprise */
     saveProgress(Object.assign({
-      prenom, email, telephone,
+      prenom, email,
       redirect_url: target,
       completed_at: new Date().toISOString()
     }, QUIZ.completionFields(state)));
