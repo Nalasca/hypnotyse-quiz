@@ -369,6 +369,13 @@ function renderEmail() {
       completed_at: new Date().toISOString()
     }, QUIZ.completionFields(state)));
 
+    /* Le quiz est terminé : on libère la session locale. Sans cela, un nouveau
+       passage depuis le même navigateur réutiliserait le même identifiant,
+       écraserait les réponses précédentes, et le webhook de complétion ne
+       partirait pas (il ne se déclenche que quand completed_at passe de vide
+       à rempli). Chaque parcours terminé doit produire sa propre ligne. */
+    try { localStorage.removeItem(SESSION_STORAGE_KEY); } catch(e) {}
+
     renderProcessing(target);
   });
 }
