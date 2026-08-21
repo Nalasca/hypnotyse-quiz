@@ -265,9 +265,8 @@
 
     /* Écran de processing affiché après la capture email, avant la redirection */
     processingSteps: [
-      { ico:"🔍", lbl:"Analyse des réponses" },
-      { ico:"🧠", lbl:"Identification des schémas émotionnels" },
-      { ico:"📊", lbl:"Matching avec des profils similaires" },
+      { ico:"🔍", lbl:"Analyse de vos réponses" },
+      { ico:"🧠", lbl:"Identification de vos schémas émotionnels" },
       { ico:"🎯", lbl:"Calcul de votre trajectoire personnalisée", sub:"Objectif, durée estimée, taux de réussite" },
       { ico:"✨", lbl:"Sélection de vos séances prioritaires", sub:"Adaptées à votre rythme et vos moments d'écoute" }
     ],

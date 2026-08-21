@@ -385,7 +385,6 @@ function renderProcessing(target) {
   const steps = QUIZ.processingSteps || [
     { ico:"🔍", lbl:"Analyse des réponses" },
     { ico:"🧠", lbl:"Identification des schémas émotionnels" },
-    { ico:"📊", lbl:"Matching avec des profils similaires" },
     { ico:"🎯", lbl:"Calcul de votre trajectoire personnalisée" },
     { ico:"✨", lbl:"Sélection de vos séances prioritaires" }
   ];
@@ -406,27 +405,40 @@ function renderProcessing(target) {
       </div>
       <h1>Analyse de votre <em>profil en cours</em></h1>
       <div class="sub">Veuillez patienter quelques secondes.<br>Vos résultats sont en cours de génération.</div>
-      <div class="proc-steps">
-        ${steps.map(s => `<div class="proc-step"><span class="ico">${s.ico}</span><span class="lbl">${s.lbl}${s.sub ? `<small>${s.sub}</small>` : ""}</span><span class="tick">✓</span></div>`).join("")}
-      </div>
+      <div class="proc-stage" id="procStage"></div>
     </div>`;
   const arc = document.getElementById("procArc");
   const pctEl = document.getElementById("procPct");
-  const els = [...document.querySelectorAll(".proc-step")];
-  const DURATION = 7500;
+  const stage = document.getElementById("procStage");
+  const DURATION = 3400;
+  let courante = -1;
+
+  /* Chaque étape remplace la précédente au même endroit : on réécrit le
+     contenu du emplacement, ce qui relance aussi l'animation d'apparition. */
+  function afficher(i) {
+    const s = steps[i];
+    stage.innerHTML = `<div class="proc-step" id="procStep">
+      <span class="ico">${s.ico}</span>
+      <span class="lbl">${s.lbl}${s.sub ? `<small>${s.sub}</small>` : ""}</span>
+      <span class="tick">✓</span></div>`;
+  }
+
   const t0 = performance.now();
   function frame(now) {
     const t = Math.min(1, (now - t0) / DURATION);
     const eased = 1 - Math.pow(1 - t, 1.6);
     pctEl.textContent = Math.round(eased * 100) + "%";
     arc.style.strokeDashoffset = CIRC * (1 - eased);
+
     const seg = eased * steps.length;
-    els.forEach((el, i) => {
-      el.classList.toggle("done", seg >= i + 1);
-      el.classList.toggle("active", seg >= i && seg < i + 1);
-    });
+    const i = Math.min(steps.length - 1, Math.floor(seg));
+    if (i !== courante) { courante = i; afficher(i); }
+    /* En fin de créneau, l'étape se coche avant d'être remplacée */
+    const el = document.getElementById("procStep");
+    if (el) el.classList.toggle("done", seg - i > 0.6);
+
     if (t < 1) requestAnimationFrame(frame);
-    else setTimeout(() => { location.href = target; }, 450);
+    else setTimeout(() => { location.href = target; }, 350);
   }
   requestAnimationFrame(frame);
 }
