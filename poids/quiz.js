@@ -72,15 +72,27 @@
     document.getElementById("btnNext").addEventListener("click", () => ctx.next());
   }
 
+  /* Nombre de répondants affiché en R3, pilotable depuis quiz_config
+     (clé repondants_poids) sans redéploiement. Un nombre est mis au format
+     français (3045 devient 3 045) ; toute autre valeur est affichée telle
+     quelle, et une clé vide ou absente retombe sur la valeur par défaut. */
+  function nbRepondants(config) {
+    const brut = String((config && config.repondants_poids) || "").trim();
+    if (!brut) return (3045).toLocaleString("fr-FR");
+    const n = Number(brut.replace(/\s/g, ""));
+    return Number.isFinite(n) ? n.toLocaleString("fr-FR") : brut;
+  }
+
   function renderRea3(ctx) {
     const homme = estHomme(ctx.state);
+    const repondants = ctx.esc(nbRepondants(ctx.config));
     ctx.app.innerHTML = `
       <div class="rea-icon">🤝</div>
       <div class="eyebrow">Vous n'êtes pas ${homme ? "seul" : "seule"}</div>
       <h1>${homme ? "D'autres vivent" : "Elles vivent"} <em>exactement</em> la même chose</h1>
       <div class="sub">Parmi les ${homme ? "personnes" : "femmes"} qui ont réalisé ce bilan avant vous :</div>
       <div class="stat-box">
-        <div class="stat-line"><div class="n">580</div><div class="t">${homme ? "personnes ont" : "femmes ont"} déjà réalisé ce bilan personnalisé</div></div>
+        <div class="stat-line"><div class="n">${repondants}</div><div class="t">${homme ? "personnes ont" : "femmes ont"} déjà réalisé ce bilan personnalisé</div></div>
         <div class="stat-line"><div class="n">7/10</div><div class="t">essaient de perdre du poids depuis plus d'un an</div></div>
         <div class="stat-line"><div class="n">N°1</div><div class="t">leur blocage principal : manger sous le coup des émotions</div></div>
       </div>
