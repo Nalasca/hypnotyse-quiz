@@ -1,0 +1,449 @@
+<!-- ============================================================
+  HYPNOTYSE · page de résultats "res-poids" · version Les galets
+  Un seul bloc Code HTML à coller dans Systeme.io, à la place des deux
+  blocs actuels. Tout est dedans : styles, contenu, personnalisation
+  (RPC quiz_get avec le sid de l'URL), mesure (RPC funnel_track).
+  Réglages à modifier : uniquement le bloc CFG ci-dessous.
+============================================================ -->
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&display=swap" rel="stylesheet">
+<style>
+#hy, #hy *{box-sizing:border-box;margin:0;padding:0}
+#hy{--ink:#1D2321;--muted:#68716C;--line:#ECEDEB;--soft:#F6F7F5;--brand:#2E7D5E;
+  --sauge:#BCD9C5;--lavande:#CEC7EF;--peche:#F4C9B5;--brume:#BFD4E8;--sable:#EAD9C2;
+  --sauge-bg:#E5F2EA;--lavande-bg:#EEECFA;--peche-bg:#FCEDE4;--brume-bg:#E6EFF9;
+  font-family:'Lexend',system-ui,sans-serif;font-size:16px;line-height:1.55;color:var(--ink);background:#fff;
+  -webkit-font-smoothing:antialiased;width:100%;padding-bottom:96px}
+#hy .wrap{max-width:560px;margin:0 auto;padding:0 20px}
+#hy .top{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 6px;max-width:600px;margin:0 auto}
+#hy .top img{height:22px;width:auto;display:block}
+#hy .top small{font-size:13px;color:var(--muted)}
+#hy h1{font-size:27px;line-height:1.2;font-weight:600;letter-spacing:-.015em;margin:4px 0 14px}
+#hy h2{font-size:22px;line-height:1.25;font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+#hy p{font-size:16px;color:var(--muted)}
+#hy p b{color:var(--ink);font-weight:600}
+#hy .lead{margin-bottom:20px}
+#hy .btn{display:flex;align-items:center;justify-content:center;height:56px;border-radius:999px;background:var(--brand);color:#fff;
+  font:600 17px/1 'Lexend',sans-serif;text-decoration:none;border:0;width:100%;cursor:pointer}
+#hy .btn.light{background:#fff;color:var(--ink);border:1.5px solid var(--line);height:50px;font-size:15px}
+#hy .meta{font-size:13.5px;color:var(--muted);text-align:center;margin-top:10px}
+#hy .sec{padding-top:40px}
+#hy .sec .lead{margin-bottom:16px}
+#hy .art{display:flex;justify-content:center;margin:10px 0 2px}
+#hy .art svg{width:180px;height:120px}
+/* bilan */
+#hy .report{border:1.5px solid var(--line);border-radius:20px;padding:4px 16px;margin-top:4px}
+#hy .row{padding:11px 0;border-bottom:1px solid var(--line)}
+#hy .row:last-child{border-bottom:0}
+#hy .row .h{display:flex;justify-content:space-between;font-size:15.5px;gap:10px}
+#hy .row .h b{font-weight:600;white-space:nowrap}
+#hy .meter{height:6px;background:var(--soft);border-radius:3px;margin-top:8px;overflow:hidden}
+#hy .meter i{display:block;height:100%;background:var(--brand);border-radius:3px;width:0;transition:width .9s ease}
+#hy .row p{font-size:15px;margin-top:2px}
+#hy .chips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+#hy .chip{background:var(--soft);border-radius:16px;padding:12px 14px}
+#hy .chip small{display:block;font-size:12px;color:var(--muted)}
+#hy .chip b{display:block;font-weight:600;font-size:17px;line-height:1.25;margin-top:2px}
+#hy .quote-box{background:var(--lavande-bg);border-radius:20px;padding:16px 18px;margin-top:12px}
+#hy .quote-box small{display:block;font-size:12.5px;color:#55506B;margin-bottom:4px}
+#hy .quote-box p{color:var(--ink);font-size:15.5px}
+/* Didier + lecteur */
+#hy .guide{background:var(--soft);border-radius:22px;padding:20px;margin-top:16px}
+#hy .guide .id{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+#hy .guide img{width:60px;height:60px;border-radius:50%;object-fit:cover;object-position:50% 18%}
+#hy .guide b{display:block;font-weight:600;font-size:17px}
+#hy .guide span{font-size:13.5px;color:var(--muted)}
+#hy .guide p{font-size:15.5px}
+#hy .player{display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 14px;margin-top:14px;cursor:pointer;border:1.5px solid var(--line);width:100%;text-align:left;font-family:inherit}
+#hy .play{width:44px;height:44px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+#hy .player small{display:block;font-size:12.5px;color:var(--muted)}
+#hy .player b{display:block;font-weight:600;font-size:15px;line-height:1.3;color:var(--ink)}
+#hy .player .track{height:4px;background:var(--soft);border-radius:2px;margin-top:7px;overflow:hidden}
+#hy .player .track i{display:block;height:100%;width:0;background:var(--brand)}
+/* programme */
+#hy .phases{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+#hy .phases span{flex-shrink:0;font-size:13.5px;padding:8px 14px;border-radius:999px;background:var(--soft);color:var(--muted)}
+#hy .phases span.on{background:var(--ink);color:#fff}
+#hy .rail{display:flex;gap:12px;overflow-x:auto;padding:0 20px 4px;margin:0 -20px;scroll-snap-type:x mandatory;scroll-padding-left:20px;scrollbar-width:none}
+#hy .rail::-webkit-scrollbar,#hy .phases::-webkit-scrollbar{display:none}
+#hy .session{flex:0 0 200px;scroll-snap-align:start;border-radius:20px;padding:14px;display:flex;flex-direction:column}
+#hy .session svg{width:100%;height:92px;display:block;margin-bottom:6px}
+#hy .session small{font-size:12.5px;color:#55605A}
+#hy .session b{font-weight:600;font-size:15.5px;line-height:1.3;margin-top:2px}
+#hy .lav{background:var(--lavande-bg)}#hy .pec{background:var(--peche-bg)}#hy .sag{background:var(--sauge-bg)}#hy .bru{background:var(--brume-bg)}
+#hy .rythme{display:flex;gap:14px;align-items:center;background:var(--sauge-bg);border-radius:20px;padding:16px;margin-top:14px}
+#hy .rythme svg{width:70px;height:58px;flex-shrink:0}
+#hy .rythme b{display:block;font-weight:600;font-size:16px;line-height:1.3}
+#hy .rythme p{font-size:14.5px;color:#3E5248;margin-top:2px}
+/* offre */
+#hy .offer{border:2px solid var(--brand);border-radius:24px;padding:22px 20px 20px;position:relative;margin-top:18px;background:#fff}
+#hy .offer .tag{position:absolute;top:-13px;left:18px;background:var(--brand);color:#fff;font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px}
+#hy .offer .name{font-size:13.5px;color:var(--muted)}
+#hy .price{display:flex;align-items:baseline;gap:8px;margin:4px 0 2px;flex-wrap:wrap}
+#hy .price b{font-size:44px;font-weight:600;letter-spacing:-.02em;line-height:1}
+#hy .price span{font-size:15px;color:var(--muted)}
+#hy .price s{font-size:15px;color:var(--muted);opacity:.7}
+#hy .bill{font-size:14px;color:var(--muted);margin-bottom:14px}
+#hy .tl{display:flex;flex-direction:column;gap:10px;margin:14px 0 6px}
+#hy .tl div{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--muted)}
+#hy .tl i{width:28px;height:28px;border-radius:50%;background:var(--sauge-bg);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px;flex-shrink:0;color:var(--brand);font-weight:600}
+#hy .tl b{color:var(--ink);font-weight:600}
+#hy .incl{list-style:none;margin:14px 0 6px;display:flex;flex-direction:column;gap:8px}
+#hy .incl li{display:flex;gap:10px;font-size:15px;line-height:1.45}
+#hy .incl li::before{content:'✓';color:var(--brand);font-weight:700;flex-shrink:0}
+#hy .incl li.wa{background:var(--sauge-bg);border-radius:12px;padding:9px 12px;margin:2px -4px}
+#hy .offer .btn{margin-top:14px}
+#hy .anchor{display:flex;gap:12px;align-items:center;margin-top:14px;padding:14px 16px;border:1px solid var(--line);border-radius:18px;font-size:14px;color:var(--muted)}
+#hy .anchor b{color:var(--ink);font-weight:600}
+#hy .anchor svg{width:50px;height:44px;flex-shrink:0}
+#hy .offer2{border:1.5px solid var(--line);border-radius:20px;padding:16px 18px;margin-top:14px}
+#hy .offer2 .h{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+#hy .offer2 .h b{font-size:17px;font-weight:600}
+#hy .offer2 .h span{font-size:20px;font-weight:600;white-space:nowrap}
+#hy .offer2 p{font-size:14px;margin:4px 0 12px}
+#hy .secure{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);margin-top:14px}
+/* avis */
+#hy .review{border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:12px}
+#hy .review p{font-size:15.5px;color:var(--ink)}
+#hy .review .who{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted);margin-top:10px}
+#hy .stars{color:#E8A020;letter-spacing:1px;font-size:14px}
+#hy .disc{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center}
+/* faq */
+#hy details{border:1px solid var(--line);border-radius:16px;margin-top:10px;padding:0 16px}
+#hy summary{list-style:none;cursor:pointer;padding:15px 0;font-weight:600;font-size:15.5px;display:flex;justify-content:space-between;gap:10px}
+#hy summary::-webkit-details-marker{display:none}
+#hy summary::after{content:'+';color:var(--brand);font-size:20px;line-height:1}
+#hy details[open] summary::after{content:'−'}
+#hy details p{padding-bottom:15px;font-size:15px}
+#hy .foot{margin-top:40px;text-align:center;font-size:12px;color:var(--muted);line-height:1.6}
+#hy .foot a{color:var(--muted)}
+/* barre fixe */
+#hy .sticky{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .3s ease;z-index:50}
+#hy .sticky.on{transform:none}
+#hy .sticky-in{max-width:560px;margin:0 auto;display:flex;align-items:center;gap:12px}
+#hy .sticky-in div{flex:1;font-size:13px;color:var(--muted);line-height:1.35}
+#hy .sticky-in div b{display:block;color:var(--ink);font-size:15px;font-weight:600}
+#hy .sticky .btn{width:auto;height:46px;padding:0 18px;font-size:15px;white-space:nowrap}
+#hy [hidden]{display:none!important}
+@media(min-width:600px){#hy h1{font-size:32px}#hy h2{font-size:24px}}
+@media(prefers-reduced-motion:reduce){#hy .meter i{transition:none}#hy .sticky{transition:none}}
+</style>
+
+<div id="hy">
+  <div class="top">
+    <img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/66282a0a72878_logo_hypnotyse1.png" alt="Hypnotyse">
+    <small id="hy-date"></small>
+  </div>
+
+  <main class="wrap">
+    <div class="art" id="hy-art"></div>
+    <h1 id="hy-h1">Votre bilan est prêt. Voici ce qui freine votre perte de poids.</h1>
+    <p class="lead" id="hy-lead">Vos réponses montrent où se joue vraiment la bataille, et ce n'est pas dans l'assiette.</p>
+
+    <div class="report" id="hy-report" hidden>
+      <div class="row"><div class="h"><span>Stress et émotions</span><b id="hy-s-stress"></b></div><div class="meter"><i id="hy-m-stress"></i></div></div>
+      <div class="row"><div class="h"><span>Envies de sucre</span><b id="hy-s-sucre"></b></div><div class="meter"><i id="hy-m-sucre"></i></div></div>
+      <div class="row"><div class="h"><span>Écart puis culpabilité</span><b id="hy-s-echec"></b></div><div class="meter"><i id="hy-m-echec"></i></div></div>
+      <div class="row" id="hy-row-moments" hidden><div class="h"><span>Vos moments à risque</span></div><p id="hy-moments"></p></div>
+    </div>
+    <div class="chips" id="hy-chips" hidden>
+      <div class="chip"><small>Votre objectif</small><b id="hy-c-obj"></b></div>
+      <div class="chip"><small>Vous essayez depuis</small><b id="hy-c-duree"></b></div>
+    </div>
+    <div class="quote-box" id="hy-quote" hidden><small>Ce que vous avez envie de retrouver</small><p id="hy-quote-txt"></p></div>
+
+    <a class="btn" href="#hy-offre" data-cta="haut" style="margin-top:20px">Commencer mes 7 jours gratuits</a>
+    <p class="meta">0 € aujourd'hui · annulable en 2 clics</p>
+
+    <section class="sec">
+      <h2 id="hy-why-t">Pourquoi la volonté ne suffit pas</h2>
+      <p class="lead" id="hy-why">Le grignotage émotionnel fonctionne comme un réflexe : une émotion arrive, la main part vers le placard avant même d'y penser. Les régimes agissent sur ce que vous mangez. Ce réflexe, lui, se joue en dessous des décisions conscientes. L'hypnose travaille à ce niveau-là, dans un état de détente profonde, pour que l'envie perde de sa force.</p>
+      <div class="guide">
+        <div class="id">
+          <img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/6772f75427e33_didier.png" alt="Didier Cantié">
+          <div><b>Didier Cantié</b><span>Infirmier anesthésiste, PDG de Santé Format Sud</span></div>
+        </div>
+        <p>L'un des précurseurs de l'hypnose au bloc opératoire, il l'enseigne aujourd'hui aux soignants pour accompagner les patients. Il a enregistré lui-même chaque séance du programme et vous suit sur WhatsApp.</p>
+        <button class="player" id="hy-player" type="button">
+          <span class="play" id="hy-play">▶</span>
+          <span style="flex:1"><small>Extrait gratuit</small><b>Écoutez Didier vous présenter la méthode</b><span class="track"><i id="hy-track"></i></span></span>
+        </button>
+        <audio id="hy-audio" preload="none" src="https://d1yei2z3i6k35z.cloudfront.net/5753843/6618ee047c843_INTRODUCTION_FINALE.mp3"></audio>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h2>Ce que vous allez écouter</h2>
+      <p class="lead">21 séances d'environ 20 minutes, en trois étapes. Un cycle dure 21 jours, vous pouvez en refaire autant que vous voulez, et le poids suit à son rythme.</p>
+      <div class="phases"><span class="on">Poser les bases</span><span>Reprendre le contrôle</span><span>Ancrer le changement</span></div>
+      <div class="rail">
+        <div class="session lav"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-calme" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 1 · 20 min</small><b>Un jour à marquer d'une pierre blanche</b></div>
+        <div class="session pec"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-envie" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 4 · 20 min</small><b>Mieux comprendre son désir de manger</b></div>
+        <div class="session sag"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-calme" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 10 · 20 min</small><b>Je cesse de nourrir mes émotions</b></div>
+        <div class="session bru"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-dort" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 19 · 20 min</small><b>Je me libère de ma culpabilité</b></div>
+        <div class="session lav"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-calme" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 21 · 20 min</small><b>Une belle image de la personne libre que je deviens</b></div>
+      </div>
+      <div class="rythme">
+        <svg viewBox="0 0 120 100"><use href="#hg-galet" x="14" y="18" width="92" height="78" style="color:#fff"/><use href="#hg-calme" x="14" y="18" width="92" height="78"/><use href="#hg-casque" x="14" y="18" width="92" height="78"/></svg>
+        <div><b id="hy-ry-t">Votre rythme : une séance par jour, au casque</b><p id="hy-ry">Environ 20 minutes, allongée, au moment qui vous convient.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" id="hy-offre">
+      <h2>Commencez sans rien payer</h2>
+      <p class="lead">Vous accédez à tout le programme pendant 7 jours. Si ce n'est pas pour vous, vous annulez en 2 clics et il ne se passe rien.</p>
+
+      <div class="offer">
+        <span class="tag">7 jours offerts</span>
+        <div class="name">Programme complet · formule annuelle</div>
+        <div class="price"><b id="hy-p-mois">7,49 €</b><span>/ mois</span><s id="hy-p-ref">19,90 €</s></div>
+        <div class="bill" id="hy-bill">Soit 89,90 € par an après l'essai, facturés en une fois</div>
+        <div class="tl">
+          <div><i>1</i><span><b>Aujourd'hui, 0 €.</b> Accès complet, vous écoutez la séance 1 ce soir.</span></div>
+          <div><i>5</i><span><b id="hy-j5">Dans 5 jours</b>, un email vous rappelle la fin de l'essai.</span></div>
+          <div><i>8</i><span><b id="hy-j8">Le 8e jour</b>, l'abonnement démarre, sauf si vous avez annulé.</span></div>
+        </div>
+        <ul class="incl">
+          <li>21 séances d'autohypnose enregistrées par Didier, cycles renouvelables</li>
+          <li>Plus de 7 heures d'audio : grignotage, sucre, émotions, estime de soi</li>
+          <li class="wa">Suivi personnalisé sur WhatsApp pendant le programme</li>
+          <li>Sur téléphone, tablette et ordinateur, à toute heure</li>
+        </ul>
+        <a class="btn" id="hy-cta-annuel" href="#" data-cta="annuel">Commencer mes 7 jours gratuits</a>
+        <p class="meta">Carte demandée, rien n'est débité avant le <span id="hy-j8b">8e jour</span></p>
+      </div>
+
+      <div class="anchor">
+        <svg viewBox="0 0 120 100"><use href="#hg-galet" x="20" y="36" width="80" height="66" style="color:var(--sable)"/><use href="#hg-galet" x="30" y="12" width="62" height="52" style="color:var(--brume)"/><use href="#hg-galet" x="38" y="-6" width="46" height="38" style="color:var(--sauge)"/><use href="#hg-calme" x="38" y="-6" width="46" height="38"/></svg>
+        <span>Une seule séance chez un hypnothérapeute coûte <b>80 à 150 €</b>. Ici, 21 séances et le suivi de Didier pour <b id="hy-anchor-p">7,49 € par mois</b>.</span>
+      </div>
+
+      <div class="offer2" id="hy-offer2">
+        <div class="h"><b id="hy-o2-t">Formule mensuelle</b><span id="hy-o2-p">19,90 € / mois</span></div>
+        <p id="hy-o2-s">Sans essai, sans engagement, accès immédiat. Pour tester un premier cycle.</p>
+        <a class="btn light" id="hy-cta-mensuel" href="#" data-cta="mensuel">Choisir la formule mensuelle</a>
+      </div>
+      <div class="secure"><span>🔒 Paiement sécurisé</span><span>Carte, PayPal, Klarna</span><span>Annulation en 2 clics</span></div>
+    </section>
+
+    <section class="sec">
+      <h2>Elles l'ont suivi</h2>
+      <p class="lead">Avis publiés par des membres du programme.</p>
+      <div class="review"><span class="stars">★★★★★</span><p>« Je viens de finir le programme de 21 jours et je suis très satisfaite ! Après avoir testé plusieurs méthodes différentes, je reprenais les kilos perdus au bout de quelques semaines. (…) Je n'ai plus les compulsions sucrées en fin de journée. Merci pour votre professionnalisme et votre accompagnement. »</p><div class="who"><span>Manon</span><span>juin 2024</span></div></div>
+      <div class="review"><span class="stars">★★★★★</span><p>« Une expérience relaxante, efficace et sans réel effort. (…) Au-delà des kilos, c'est le sentiment de retrouver enfin une vie saine qui m'apporte le plus grand bien, et de ne plus me sentir soumise aux pulsions alimentaires. Il n'y a aucun régime ou effort, ça se fait naturellement. »</p><div class="who"><span>Estelle</span><span>avril 2025</span></div></div>
+      <div class="review"><span class="stars">★★★★★</span><p>« C'est la première fois que je ressens des choses avec l'hypnose et la voix de Didier nous berce. J'en suis au 17e jour, je me sens moins frustrée si je fais un écart et pratiquement plus de grignotage. »</p><div class="who"><span>Corinne</span><span>2024</span></div></div>
+      <div class="review"><span class="stars">★★★★★</span><p>« Depuis que j'ai commencé, j'ai moins de fringales, moins besoin de manger quand je me sens stressée ou triste. La voix de Didier est très apaisante et on se sent directement bien. »</p><div class="who"><span>Kinga</span><span>septembre 2024</span></div></div>
+      <p class="disc">Témoignages réels de membres. Les résultats varient d'une personne à l'autre.</p>
+    </section>
+
+    <section class="sec">
+      <h2>Vos questions</h2>
+      <details><summary>Comment fonctionne l'essai de 7 jours ?</summary><p>Vous accédez tout de suite à tout le programme. Pendant 7 jours, rien n'est débité. Si vous continuez, l'abonnement démarre automatiquement le 8e jour. Si vous annulez avant, il ne se passe rien : aucun débit, aucune question.</p></details>
+      <details><summary>Je n'ai jamais essayé l'hypnose. Est-ce que ça marche quand même ?</summary><p>Oui, et souvent encore mieux. Vous n'avez rien à faire : vous écoutez et vous suivez la voix de Didier. La plupart des membres ressentent un effet dès la première séance, sans aucune expérience préalable.</p></details>
+      <details><summary>Est-ce que je dois suivre un régime en parallèle ?</summary><p>Non. Le programme travaille sur les envies, pas sur une liste d'aliments interdits. Beaucoup de membres constatent qu'elles mangent différemment, sans frustration, sans jamais compter une calorie.</p></details>
+      <details><summary>Et si ça ne marche pas pour moi ?</summary><p>C'est exactement à ça que sert l'essai. Écoutez les premières séances, ressentez les premiers effets. Si l'hypnose ne vous convient pas, vous annulez en 2 clics pendant l'essai, sans justificatif.</p></details>
+      <details><summary>Combien de temps avant de sentir un changement ?</summary><p>La plupart observent un changement dans leurs comportements dès la première semaine. Le poids, lui, suit à son rythme : un cycle dure 21 jours et vous pouvez en enchaîner autant que nécessaire.</p></details>
+      <details><summary>À quoi sert le numéro WhatsApp ?</summary><p>À votre suivi. Didier et l'équipe vous accompagnent pendant le programme, répondent à vos questions et vous aident à tenir le rythme. Il n'est jamais utilisé pour de la publicité.</p></details>
+      <details><summary>Puis-je annuler facilement ?</summary><p>Oui, en 2 clics depuis votre espace membre, sans appel ni formulaire caché. Si vous annulez pendant l'essai, vous n'êtes jamais débitée. Ensuite, l'accès reste actif jusqu'à la fin de la période payée.</p></details>
+    </section>
+
+    <section class="sec">
+      <a class="btn" href="#" id="hy-cta-bas" data-cta="bas">Commencer mes 7 jours gratuits</a>
+      <p class="meta">0 € aujourd'hui · puis <span id="hy-bas-p">89,90 € par an, soit 7,49 € par mois</span> · annulable en 2 clics</p>
+    </section>
+
+    <div class="foot">
+      Hypnotyse · <a href="https://hypnotyse.com/cgv" target="_blank" rel="nofollow">CGV</a> · <a href="https://hypnotyse.com/mentions-legales/" target="_blank" rel="nofollow">Mentions légales</a><br>
+      Ce bilan ne remplace pas un avis médical. Les programmes ne conviennent pas aux personnes souffrant de troubles psychiques sévères.
+    </div>
+  </main>
+
+  <div class="sticky" id="hy-sticky">
+    <div class="sticky-in">
+      <div><b>7 jours offerts</b>0 € aujourd'hui</div>
+      <a class="btn" href="#" id="hy-cta-sticky" data-cta="sticky">Commencer</a>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ===================== RÉGLAGES ===================== */
+  var CFG = {
+    lien_annuel  : 'https://app.hypnotyse.com/paiement-poids-annuel',
+    lien_mensuel : 'https://app.hypnotyse.com/paiement-poids-mensuel',
+    prix_an      : 89.90,   /* facturé une fois par an après l'essai */
+    prix_mensuel : 19.90,   /* formule sans essai */
+    essai_jours  : 7,
+    /* formule secondaire : textes libres, ex. pour remplacer le mensuel par un paiement unique */
+    o2_titre : 'Formule mensuelle', o2_prix : '19,90 € / mois',
+    o2_sous  : 'Sans essai, sans engagement, accès immédiat. Pour tester un premier cycle.',
+    o2_bouton: 'Choisir la formule mensuelle'
+  };
+  /* ==================================================== */
+  var SB_URL = 'https://ydyogdzwdudmuzbpsozz.supabase.co';
+  var SB_KEY = 'sb_publishable_W8FTMb_XDkEKO4XbRRB7CQ_YJEURUS-';
+  var PAGE = 'res_poids_v3', VARIANT = 'S';
+
+  /* ---- galets : symboles SVG ---- */
+  var sprite = document.createElement('div'); sprite.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+  sprite.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg"><defs>'
+    + '<symbol id="hg-galet" viewBox="0 0 120 100"><ellipse cx="62" cy="93" rx="36" ry="4" fill="#1D2321" opacity=".07"/><path d="M17 60C14 37 38 19 64 19c28 0 47 16 45 39-2 22-22 32-48 32-27 0-41-9-44-30z" fill="currentColor"/><ellipse cx="45" cy="35" rx="15" ry="5.5" transform="rotate(-14 45 35)" fill="#fff" opacity=".38"/></symbol>'
+    + '<symbol id="hg-calme" viewBox="0 0 120 100"><g fill="none" stroke="#1D2321" stroke-width="3" stroke-linecap="round"><path d="M45 57q6 6 12 0"/><path d="M71 57q6 6 12 0"/><path d="M58 68q6 5 12 0"/></g><circle cx="42" cy="67" r="4.5" fill="#EE9C88" opacity=".55"/><circle cx="87" cy="67" r="4.5" fill="#EE9C88" opacity=".55"/></symbol>'
+    + '<symbol id="hg-dort" viewBox="0 0 120 100"><g fill="none" stroke="#1D2321" stroke-width="3" stroke-linecap="round"><path d="M45 59q6-5 12 0"/><path d="M71 59q6-5 12 0"/><path d="M61 70h6"/></g></symbol>'
+    + '<symbol id="hg-tendu" viewBox="0 0 120 100"><g fill="none" stroke="#1D2321" stroke-width="3" stroke-linecap="round"><path d="M46 55l9 3"/><path d="M82 55l-9 3"/><path d="M56 71q3-3 6 0t6 0t6 0"/></g><path d="M96 30c3 5 5 8 5 11a5 5 0 0 1-10 0c0-3 2-6 5-11z" fill="#9CC3E6"/></symbol>'
+    + '<symbol id="hg-envie" viewBox="0 0 120 100"><g fill="none" stroke="#1D2321" stroke-width="3" stroke-linecap="round"><circle cx="50" cy="57" r="3" fill="#1D2321"/><circle cx="78" cy="57" r="3" fill="#1D2321"/><path d="M58 70q6-2 12 0"/></g></symbol>'
+    + '<symbol id="hg-casque" viewBox="0 0 120 100"><path d="M27 52C27 16 95 16 95 52" fill="none" stroke="#1D2321" stroke-width="5" stroke-linecap="round"/><rect x="17" y="46" width="15" height="24" rx="6" fill="#1D2321"/><rect x="90" y="46" width="15" height="24" rx="6" fill="#1D2321"/></symbol>'
+    + '<symbol id="hg-lune" viewBox="0 0 40 40"><path d="M27 6a15 15 0 1 0 8 25A13 13 0 0 1 27 6z" fill="#F5C66B"/></symbol>'
+    + '<symbol id="hg-soleil" viewBox="0 0 40 40"><circle cx="20" cy="20" r="9" fill="#F5C66B"/><g stroke="#F5C66B" stroke-width="3" stroke-linecap="round"><path d="M20 3v4M20 33v4M3 20h4M33 20h4M8 8l3 3M29 29l3 3M8 32l3-3M29 11l3-3"/></g></symbol>'
+    + '<symbol id="hg-tv" viewBox="0 0 120 100"><rect x="18" y="8" width="84" height="50" rx="10" fill="#DCE7F2"/><rect x="26" y="16" width="68" height="34" rx="6" fill="#fff" opacity=".5"/></symbol>'
+    + '<symbol id="hg-ondes" viewBox="0 0 160 40"><g fill="none" stroke="#2E7D5E" stroke-width="2"><ellipse cx="80" cy="20" rx="34" ry="7" opacity=".55"/><ellipse cx="80" cy="20" rx="54" ry="11" opacity=".3"/><ellipse cx="80" cy="20" rx="74" ry="15" opacity=".15"/></g></symbol>'
+    + '</defs></svg>';
+  document.body.appendChild(sprite);
+
+  /* ---- outils ---- */
+  var $ = function(id){ return document.getElementById(id); };
+  var txt = function(id, v){ var e = $(id); if (e) e.textContent = v; };
+  var eur = function(n){ return n.toFixed(2).replace('.', ',').replace(/,00$/, '') + ' €'; };
+  var cap = function(s){ s = String(s || '').trim(); return s.charAt(0).toUpperCase() + s.slice(1); };
+  var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+  var fr = function(d){ return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }); };
+
+  var q = new URLSearchParams(location.search);
+  var sid = q.get('sid') || '';
+  if (!/^[0-9a-f-]{36}$/i.test(sid)) sid = '';
+  var prenom = cap(q.get('prenom'));
+  var fbclid = q.get('fbclid') || '';
+  try { if (fbclid) localStorage.setItem('hy_fbclid', fbclid); else fbclid = localStorage.getItem('hy_fbclid') || ''; } catch(e){}
+
+  function rpc(name, body, keepalive){
+    return fetch(SB_URL + '/rest/v1/rpc/' + name, { method: 'POST', keepalive: !!keepalive,
+      headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  }
+  var once = {};
+  function track(event, meta, keepalive){
+    if (!sid) return;
+    if (event !== 'cta_click' && event !== 'faq_open') { if (once[event]) return; once[event] = true; }
+    try { rpc('funnel_track', { p_sid: sid, p_event: event, p_page: PAGE, p_variant: VARIANT, p_meta: meta || {} }, keepalive).catch(function(){}); } catch(e){}
+  }
+  function dl(ev, data){ try { window.dataLayer = window.dataLayer || []; window.dataLayer.push(Object.assign({ event: ev, session_id: sid, quiz_type: 'poids' }, data || {})); } catch(e){} }
+
+  /* ---- prix, dates ---- */
+  var mois = CFG.prix_an / 12;
+  txt('hy-p-mois', eur(Math.floor(mois * 100) / 100));
+  txt('hy-p-ref', eur(CFG.prix_mensuel));
+  txt('hy-bill', 'Soit ' + eur(CFG.prix_an) + ' par an après l\'essai, facturés en une fois');
+  txt('hy-anchor-p', eur(Math.floor(mois * 100) / 100) + ' par mois');
+  txt('hy-bas-p', eur(CFG.prix_an) + ' par an, soit ' + eur(Math.floor(mois * 100) / 100) + ' par mois');
+  txt('hy-o2-t', CFG.o2_titre); txt('hy-o2-p', CFG.o2_prix); txt('hy-o2-s', CFG.o2_sous); txt('hy-cta-mensuel', CFG.o2_bouton);
+  var now = new Date();
+  txt('hy-date', 'Bilan du ' + fr(now));
+  txt('hy-j5', 'Le ' + fr(new Date(now.getTime() + (CFG.essai_jours - 2) * 864e5)));
+  txt('hy-j8', 'Le ' + fr(new Date(now.getTime() + CFG.essai_jours * 864e5)));
+  txt('hy-j8b', fr(new Date(now.getTime() + CFG.essai_jours * 864e5)));
+
+  /* ---- liens vers le paiement : prénom, sid, fbclid seulement, jamais l'email ---- */
+  function link(base){
+    var p = new URLSearchParams();
+    if (prenom) p.set('prenom', prenom); if (sid) p.set('sid', sid); if (fbclid) p.set('fbclid', fbclid);
+    var s = p.toString(); return base + (s ? '?' + s : '');
+  }
+  ['hy-cta-annuel', 'hy-cta-bas', 'hy-cta-sticky'].forEach(function(id){ var a = $(id); if (a) a.href = link(CFG.lien_annuel); });
+  $('hy-cta-mensuel').href = link(CFG.lien_mensuel);
+  document.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('[data-cta]') : null; if (!a) return;
+    var plan = a.getAttribute('data-cta');
+    if (plan === 'haut') { e.preventDefault(); var o = $('hy-offre'); if (o) o.scrollIntoView({ behavior: 'smooth', block: 'start' }); track('cta_click', { cta: 'haut' }); return; }
+    track('cta_click', { cta: plan }, true);
+    dl('begin_checkout', { plan: plan === 'mensuel' ? 'mensuel' : 'annuel', value: plan === 'mensuel' ? CFG.prix_mensuel : CFG.prix_an, currency: 'EUR' });
+  });
+
+  /* ---- galet d'illustration selon le frein ---- */
+  function art(kind){
+    var g = { nuit: ['hg-lavande', 'hg-dort', true, false], tele: ['hg-brume', 'hg-envie', false, true], stress: ['hg-peche', 'hg-tendu', false, false], sucre: ['hg-sable', 'hg-envie', false, false], calme: ['hg-sauge', 'hg-calme', false, false] }[kind] || ['hg-sauge', 'hg-calme', false, false];
+    var col = { 'hg-lavande': '#CEC7EF', 'hg-brume': '#BFD4E8', 'hg-peche': '#F4C9B5', 'hg-sable': '#EAD9C2', 'hg-sauge': '#BCD9C5' }[g[0]];
+    $('hy-art').innerHTML = '<svg viewBox="0 0 180 120">' + (g[3] ? '<use href="#hg-tv" x="30" y="0" width="120" height="100"/>' : '')
+      + (g[2] || g[3] ? '<use href="#hg-lune" x="140" y="6" width="32" height="32"/>' : '')
+      + '<use href="#hg-galet" x="40" y="' + (g[3] ? 34 : 20) + '" width="100" height="84" style="color:' + col + '"/><use href="#' + g[1] + '" x="40" y="' + (g[3] ? 34 : 20) + '" width="100" height="84"/></svg>';
+  }
+  art('calme');
+
+  /* ---- personnalisation ---- */
+  function frein(a, obstacle){
+    var stress = +a.stress || 0, sucre = +a.sucre || 0, echec = +a.echec || 0;
+    var moments = [].concat(a.moments_grignotage || []).join(' ').toLowerCase();
+    var soir = /soir|nuit/.test(moments);
+    if (stress >= 4 && soir) return ['le grignotage émotionnel du soir', /nuit/.test(moments) && !/télé/.test(moments) ? 'nuit' : 'tele'];
+    if (stress >= 4) return ['l\'alimentation émotionnelle', 'stress'];
+    if (sucre >= 4) return ['les envies de sucre', 'sucre'];
+    if (echec >= 4) return ['le cercle écart puis culpabilité', 'stress'];
+    if (soir) return ['le grignotage du soir', 'tele'];
+    if (/grignot/i.test(obstacle || '')) return ['le grignotage et les envies', 'sucre'];
+    return ['des automatismes alimentaires', 'calme'];
+  }
+  function lower1(s){ s = String(s); return s.charAt(0).toLowerCase() + s.slice(1); }
+  function joinFr(arr){ arr = arr.map(function(s, i){ return i ? lower1(s) : s; }); return arr.length < 2 ? arr.join('') : arr.slice(0, -1).join(', ') + ' et ' + arr[arr.length - 1]; }
+
+  function render(d){
+    var a = d.answers || {};
+    var f = frein(a, d.obstacle_percu);
+    var p = cap(d.prenom) || prenom;
+    var femme = (d.sexe || '').toLowerCase() !== 'homme';
+    txt('hy-h1', (p ? p + ', ' : '') + (p ? 'c' : 'C') + 'e qui vous freine le plus, c\'est ' + f[0] + '.');
+    txt('hy-lead', 'C\'est ce qui ressort de vos 15 réponses. Et ce n\'est pas une question de volonté.');
+    art(f[1]);
+    var S = { stress: +a.stress || 0, sucre: +a.sucre || 0, echec: +a.echec || 0 };
+    if (S.stress || S.sucre || S.echec) {
+      $('hy-report').hidden = false;
+      ['stress', 'sucre', 'echec'].forEach(function(k){ txt('hy-s-' + k, S[k] + ' / 5'); setTimeout(function(){ $('hy-m-' + k).style.width = (S[k] * 20) + '%'; }, 150); });
+    }
+    var m = [].concat(a.moments_grignotage || []).filter(function(x){ return x && !/jamais/i.test(x); });
+    if (m.length) { $('hy-row-moments').hidden = false; txt('hy-moments', joinFr(m)); $('hy-report').hidden = false; }
+    var diff = (+d.poids_actuel || 0) - (+d.poids_ideal || 0);
+    if (diff > 0 || d.duree_tentative) {
+      $('hy-chips').hidden = false;
+      txt('hy-c-obj', diff > 0 ? '−' + Math.round(diff) + ' kg' : 'Retrouver la sérénité');
+      txt('hy-c-duree', d.duree_tentative ? lower1(d.duree_tentative) : 'quelque temps');
+    }
+    if (d.objectif_vie) { $('hy-quote').hidden = false; txt('hy-quote-txt', [].concat(d.objectif_vie).join(' · ')); }
+    if (f[1] === 'tele' || f[1] === 'nuit' || f[1] === 'stress') {
+      txt('hy-why-t', 'Pourquoi vous craquez ' + (f[1] === 'stress' ? 'quand les émotions montent' : 'le soir'));
+    }
+    if (d.moment_ecoute) { txt('hy-ry-t', 'Votre rythme : une séance ' + lower1(d.moment_ecoute) + ', au casque'); }
+    txt('hy-ry', 'Environ 20 minutes, allongé' + (femme ? 'e' : '') + ', au moment où l\'envie monte d\'habitude.');
+    dl('results_view', { frein: f[0] });
+    track('results_view', { donnees: true, frein: f[0] });
+  }
+  if (sid) {
+    rpc('quiz_get', { p_id: sid }).then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){ if (d && (d.prenom || d.answers)) render(d); else { dl('results_view', {}); track('results_view', { donnees: false }); } })
+      .catch(function(){ dl('results_view', {}); track('results_view', { donnees: false }); });
+  } else {
+    if (prenom) txt('hy-h1', prenom + ', votre bilan est prêt. Voici ce qui freine votre perte de poids.');
+    dl('results_view', {});
+  }
+
+  /* ---- lecteur audio ---- */
+  var au = $('hy-audio'), playing = false, fired30 = false;
+  $('hy-player').addEventListener('click', function(){
+    if (playing) { au.pause(); } else { au.play(); track('audio_play'); }
+  });
+  au.addEventListener('play', function(){ playing = true; txt('hy-play', '❚❚'); });
+  au.addEventListener('pause', function(){ playing = false; txt('hy-play', '▶'); });
+  au.addEventListener('timeupdate', function(){
+    if (au.duration) $('hy-track').style.width = (au.currentTime / au.duration * 100) + '%';
+    if (!fired30 && au.currentTime >= 30) { fired30 = true; track('audio_30s'); }
+  });
+
+  /* ---- FAQ, défilement, barre fixe ---- */
+  document.querySelectorAll('#hy details').forEach(function(dt){ dt.addEventListener('toggle', function(){ if (dt.open) track('faq_open', { q: dt.querySelector('summary').textContent.slice(0, 60) }); }); });
+  var offre = $('hy-offre'), haut = document.querySelector('#hy [data-cta="haut"]'), sticky = $('hy-sticky');
+  var hautVisible = true, offreVisible = false;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.target === haut) hautVisible = e.isIntersecting; if (e.target === offre) { offreVisible = e.isIntersecting; if (e.isIntersecting) track('results_scroll_offer'); } sticky.classList.toggle('on', !hautVisible && !offreVisible); }); }, { threshold: 0.05 }).observe(haut);
+    new IntersectionObserver(function(es){ es.forEach(function(e){ offreVisible = e.isIntersecting; if (e.isIntersecting) track('results_scroll_offer'); sticky.classList.toggle('on', !hautVisible && !offreVisible); }); }, { threshold: 0.05 }).observe(offre);
+  }
+  var s50 = false;
+  window.addEventListener('scroll', function(){ if (!s50 && (window.scrollY + innerHeight) / document.body.scrollHeight > 0.5) { s50 = true; track('results_scroll_50'); } }, { passive: true });
+})();
+</script>

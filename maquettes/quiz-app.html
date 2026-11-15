@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maquette quiz | Hypnotyse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css"><script src="galets.js" defer></script>
+<style>[data-s]{display:none}[data-s].show{display:block}</style></head>
+<body>
+  <header class="q-top">
+    <button class="back" aria-label="Retour">‹</button>
+    <a class="logo" href="#"><svg viewBox="0 0 120 100"><use href="#galet" style="color:var(--sauge)"/><use href="#calme"/></svg><span>hypno<i>tyse</i></span></a>
+    <span class="step" id="step">1 / 15</span>
+  </header>
+  <div class="q-bar"><i id="bar" style="width:7%"></i></div>
+
+  <main class="wrap q">
+
+    <section data-s="sexe">
+      <h1>Vous êtes…</h1>
+      <p class="sub">Le poids d'équilibre se calcule différemment selon le sexe.</p>
+      <div class="opts">
+        <button class="opt"><svg viewBox="0 0 120 100"><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--lavande)"/><use href="#calme" x="14" y="18" width="92" height="78"/></svg>Femme</button>
+        <button class="opt"><svg viewBox="0 0 120 100"><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--brume)"/><use href="#calme" x="14" y="18" width="92" height="78"/></svg>Homme</button>
+      </div>
+    </section>
+
+    <section data-s="moments">
+      <h1>À quels moments avez-vous envie de grignoter ?</h1>
+      <p class="sub">Plusieurs réponses possibles.</p>
+      <div class="opts">
+        <button class="opt"><svg viewBox="0 0 120 100"><use href="#soleil" x="76" y="4" width="34" height="34"/><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--sable)"/><use href="#calme" x="14" y="18" width="92" height="78"/></svg>Dans la matinée</button>
+        <button class="opt"><svg viewBox="0 0 120 100"><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--peche)"/><use href="#tendu" x="14" y="18" width="92" height="78"/></svg>Dans l'après-midi</button>
+        <button class="opt on"><svg viewBox="0 0 120 100"><use href="#tv"/><use href="#galet" x="22" y="34" width="76" height="64" style="color:var(--brume)"/><use href="#envie" x="22" y="34" width="76" height="64"/></svg>Le soir devant la télévision</button>
+        <button class="opt on"><svg viewBox="0 0 120 100"><use href="#lune" x="80" y="2" width="30" height="30"/><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--lavande)"/><use href="#dort" x="14" y="18" width="92" height="78"/></svg>Tard le soir ou la nuit</button>
+        <button class="opt wide"><svg viewBox="0 0 120 100"><use href="#galet" style="color:var(--sauge)"/><use href="#calme"/></svg>Je ne grignote presque jamais</button>
+      </div>
+      <button class="btn">Continuer</button>
+    </section>
+
+    <section data-s="silhouette">
+      <h1>Quelle silhouette vous ressemble le plus ?</h1>
+      <p class="sub">Choisissez la plus proche, même si aucune n'est exacte.</p>
+      <div class="opts">
+        <button class="opt silu"><img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/67f53d5ef0a36_v.png" alt=""><b>En V</b><span>Épaules plus larges que les hanches</span></button>
+        <button class="opt silu on"><img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/67f53d5eeefac_x.png" alt=""><b>En X</b><span>Taille marquée</span></button>
+        <button class="opt silu"><img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/67f53d5ef1d1a_i.png" alt=""><b>En I</b><span>Fine et longiligne</span></button>
+        <button class="opt silu"><img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/67f53d5eeb87e_a.png" alt=""><b>En A</b><span>Hanches plus larges que les épaules</span></button>
+        <button class="opt silu"><img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/67f53d5eeb1be_h.png" alt=""><b>En H</b><span>Taille peu marquée</span></button>
+        <button class="opt silu"><img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/67f53d5ef07e0_o.png" alt=""><b>En O</b><span>Toute en rondeurs</span></button>
+      </div>
+    </section>
+
+    <section data-s="stress">
+      <div class="scale-art"><svg viewBox="0 0 120 100"><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--peche)"/><use href="#tendu" x="14" y="18" width="92" height="78"/></svg></div>
+      <h1>Quand vous êtes stressée ou contrariée, à quel point la nourriture vous attire ?</h1>
+      <p class="sub">1 = pas du tout, 5 = c'est plus fort que moi.</p>
+      <div class="scale"><button>1</button><button>2</button><button>3</button><button class="on">4</button><button>5</button></div>
+      <div class="scale-legend"><span>Pas du tout</span><span>Plus fort que moi</span></div>
+    </section>
+
+    <section data-s="email">
+      <h1>Votre bilan est prêt</h1>
+      <p class="sub">Indiquez où l'envoyer. Il vous attend aussi juste après.</p>
+      <div class="teaser">
+        <svg viewBox="0 0 120 100"><use href="#lune" x="84" y="2" width="28" height="28"/><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--lavande)"/><use href="#envie" x="14" y="18" width="92" height="78"/></svg>
+        <div><small>Votre frein principal</small><b>Le grignotage émotionnel du soir</b></div>
+      </div>
+      <div class="field"><input type="text" placeholder="Prénom" value="Marie"></div>
+      <div class="field"><input type="email" placeholder="Adresse email"></div>
+      <label class="consent"><input type="checkbox" checked> J'accepte de recevoir mon bilan et les conseils d'Hypnotyse par email. Désinscription en un clic.</label>
+      <button class="btn">Voir mon bilan</button>
+      <p class="legal">Ce bilan ne remplace pas un avis médical. Les programmes ne conviennent pas aux personnes souffrant de troubles psychiques sévères.</p>
+    </section>
+
+    <section data-s="processing">
+      <div class="proc">
+        <svg viewBox="0 0 220 170">
+          <g class="onde"><use href="#ondes" x="10" y="118" width="200" height="50"/></g>
+          <g class="galet"><use href="#galet" x="50" y="22" width="120" height="100" style="color:var(--sauge)"/><use href="#calme" x="50" y="22" width="120" height="100"/></g>
+        </svg>
+        <h1>Marie, on prépare votre bilan</h1>
+        <p>Quelques secondes…</p>
+        <div class="steps">
+          <div class="done"><i>✓</i>Lecture de vos 15 réponses</div>
+          <div class="done"><i>✓</i>Calcul de votre poids d'équilibre</div>
+          <div><i></i>Repérage de vos moments à risque</div>
+          <div><i></i>Composition de votre programme</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    var s = new URLSearchParams(location.search).get('s') || 'sexe';
+    var order = ['sexe','moments','silhouette','stress','email','processing'];
+    var num = {sexe:1, moments:11, silhouette:9, stress:13, email:15, processing:15};
+    var el = document.querySelector('[data-s="'+s+'"]') || document.querySelector('[data-s]');
+    el.classList.add('show');
+    document.getElementById('step').textContent = (num[s]||1) + ' / 15';
+    document.getElementById('bar').style.width = Math.round((num[s]||1)/15*100) + '%';
+    if (s === 'processing') document.querySelector('.q-top').style.visibility = 'hidden';
+  </script>
+</body></html>

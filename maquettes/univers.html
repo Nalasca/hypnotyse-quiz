@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Univers graphique | Hypnotyse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1D2321;--muted:#6B736F;--line:#ECEDEB;--brand:#2E7D5E;
+  --sable:#EAD9C2;--peche:#F4C9B5;--sauge:#BCD9C5;--lavande:#CEC7EF;--brume:#BFD4E8;--soleil:#F5C66B;--joue:#EE9C88}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Lexend',system-ui,sans-serif;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased}
+.page{max-width:760px;margin:0 auto;padding:28px 20px 60px}
+h1{font-size:28px;font-weight:600;letter-spacing:-.015em}
+.intro{color:var(--muted);margin:6px 0 30px;font-size:15px}
+h2{font-size:15px;font-weight:600;margin:34px 0 12px}
+.row{display:flex;flex-wrap:wrap;gap:14px}
+.tile{flex:1 1 150px;background:#FAFAF8;border-radius:22px;padding:16px 12px 12px;text-align:center}
+.tile svg{width:100%;height:120px;display:block}
+.tile span{display:block;font-size:13px;color:var(--muted);margin-top:6px}
+.sw{flex:1 1 90px;border-radius:16px;height:74px;display:flex;align-items:flex-end;padding:8px 10px;font-size:12px;color:var(--ink)}
+.appicon{width:96px;height:96px;border-radius:24px;background:var(--sauge);display:flex;align-items:center;justify-content:center}
+.appicon svg{width:74px;height:74px}
+.lockup{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.word{font-size:30px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.word i{font-style:normal;color:var(--brand)}
+/* écran d'application */
+.phone{width:320px;border:1px solid var(--line);border-radius:34px;padding:22px 16px 18px;margin-top:4px}
+.phone .bar{height:4px;background:var(--line);border-radius:2px;margin-bottom:18px}
+.phone .bar i{display:block;width:66%;height:100%;background:var(--ink);border-radius:2px}
+.phone h3{font-size:20px;font-weight:600;line-height:1.25;letter-spacing:-.01em}
+.phone p{font-size:13px;color:var(--muted);margin:4px 0 14px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{border:1.5px solid var(--line);border-radius:18px;padding:8px 8px 10px;text-align:center;font-size:13px;line-height:1.3}
+.opt svg{width:100%;height:68px;display:block;margin-bottom:4px}
+.opt.on{border-color:var(--ink);background:#F7F7F4}
+.opt.wide{grid-column:span 2;display:flex;align-items:center;gap:10px;text-align:left}
+.opt.wide svg{width:56px;height:44px;margin:0}
+.card{width:220px;border-radius:22px;background:var(--lavande);padding:14px;margin-top:4px}
+.card svg{width:100%;height:110px;display:block}
+.card small{font-size:12px;color:#4E4A66}
+.card b{display:block;font-weight:600;font-size:15px;line-height:1.3;margin-top:2px}
+.flex{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- corps du galet : fill = currentColor -->
+    <symbol id="galet" viewBox="0 0 120 100">
+      <ellipse cx="62" cy="93" rx="36" ry="4" fill="#1D2321" opacity=".07"/>
+      <path d="M17 60C14 37 38 19 64 19c28 0 47 16 45 39-2 22-22 32-48 32-27 0-41-9-44-30z" fill="currentColor"/>
+      <ellipse cx="45" cy="35" rx="15" ry="5.5" transform="rotate(-14 45 35)" fill="#fff" opacity=".38"/>
+    </symbol>
+    <!-- visage apaisé : yeux fermés, petit sourire -->
+    <symbol id="calme" viewBox="0 0 120 100">
+      <g fill="none" stroke="#1D2321" stroke-width="3" stroke-linecap="round">
+        <path d="M45 57q6 6 12 0"/><path d="M71 57q6 6 12 0"/><path d="M58 68q6 5 12 0"/>
+      </g>
+      <circle cx="42" cy="67" r="4.5" fill="#EE9C88" opacity=".55"/><circle cx="87" cy="67" r="4.5" fill="#EE9C88" opacity=".55"/>
+    </symbol>
+    <!-- visage endormi : yeux fermés vers le bas -->
+    <symbol id="dort" viewBox="0 0 120 100">
+      <g fill="none" stroke="#1D2321" stroke-width="3" stroke-linecap="round">
+        <path d="M45 59q6-5 12 0"/><path d="M71 59q6-5 12 0"/><path d="M61 70h6"/>
+      </g>
+    </symbol>
+    <!-- visage sous pression -->
+    <symbol id="tendu" viewBox="0 0 120 100">
+      <g fill="none" stroke="#1D2321" stroke-width="3" stroke-linecap="round">
+        <path d="M46 55l9 3"/><path d="M82 55l-9 3"/><path d="M56 71q3-3 6 0t6 0t6 0"/>
+      </g>
+      <path d="M96 30c3 5 5 8 5 11a5 5 0 0 1-10 0c0-3 2-6 5-11z" fill="#9CC3E6"/>
+    </symbol>
+    <symbol id="lune" viewBox="0 0 40 40"><path d="M27 6a15 15 0 1 0 8 25A13 13 0 0 1 27 6z" fill="#F5C66B"/></symbol>
+    <symbol id="soleil" viewBox="0 0 40 40"><circle cx="20" cy="20" r="9" fill="#F5C66B"/>
+      <g stroke="#F5C66B" stroke-width="3" stroke-linecap="round"><path d="M20 3v4M20 33v4M3 20h4M33 20h4M8 8l3 3M29 29l3 3M8 32l3-3M29 11l3-3"/></g></symbol>
+    <symbol id="ondes" viewBox="0 0 160 40" >
+      <g fill="none" stroke="#2E7D5E" stroke-width="2">
+        <ellipse cx="80" cy="20" rx="34" ry="7" opacity=".55"/><ellipse cx="80" cy="20" rx="54" ry="11" opacity=".3"/><ellipse cx="80" cy="20" rx="74" ry="15" opacity=".15"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="page">
+  <h1>Les galets Hypnotyse</h1>
+  <p class="intro">Première planche de l'univers graphique, à challenger. Aperçu, rien n'est en ligne.</p>
+
+  <h2>Les personnages</h2>
+  <div class="row">
+    <div class="tile"><svg viewBox="0 0 120 100"><use href="#galet" style="color:var(--sauge)"/><use href="#calme"/></svg><span>Apaisé</span></div>
+    <div class="tile"><svg viewBox="0 0 120 100"><use href="#galet" style="color:var(--lavande)"/><use href="#dort"/><use href="#lune" x="84" y="4" width="26" height="26"/></svg><span>Le soir</span></div>
+    <div class="tile"><svg viewBox="0 0 120 100"><use href="#galet" style="color:var(--peche)"/><use href="#tendu"/></svg><span>Sous pression</span></div>
+    <div class="tile"><svg viewBox="0 0 120 100">
+      <use href="#galet" x="20" y="36" width="80" height="66" style="color:var(--sable)"/>
+      <use href="#galet" x="30" y="12" width="62" height="52" style="color:var(--brume)"/>
+      <use href="#galet" x="38" y="-6" width="46" height="38" style="color:var(--sauge)"/>
+      <use href="#calme" x="38" y="-6" width="46" height="38"/></svg><span>En équilibre</span></div>
+  </div>
+
+  <h2>Le motif : l'onde</h2>
+  <div class="row">
+    <div class="tile" style="flex-basis:100%"><svg viewBox="0 0 320 110" style="height:130px">
+      <use href="#ondes" x="40" y="62" width="240" height="60"/>
+      <use href="#galet" x="112" y="10" width="96" height="80" style="color:var(--sauge)"/><use href="#calme" x="112" y="10" width="96" height="80"/>
+    </svg><span>Un galet qui se pose sur l'eau : le calme qui s'installe, et l'onde d'une voix au casque</span></div>
+  </div>
+
+  <h2>Les couleurs</h2>
+  <div class="row">
+    <div class="sw" style="background:var(--sauge)">Sauge</div>
+    <div class="sw" style="background:var(--lavande)">Lavande</div>
+    <div class="sw" style="background:var(--peche)">Pêche</div>
+    <div class="sw" style="background:var(--brume)">Brume</div>
+    <div class="sw" style="background:var(--sable)">Sable</div>
+    <div class="sw" style="background:var(--brand);color:#fff">Vert action</div>
+  </div>
+
+  <h2>Logo et icône d'appli</h2>
+  <div class="lockup">
+    <div class="appicon"><svg viewBox="0 0 120 100"><use href="#galet" style="color:#fff"/><use href="#calme"/></svg></div>
+    <span class="word">hypno<i>tyse</i></span>
+  </div>
+
+  <h2>En situation</h2>
+  <div class="flex">
+    <div class="phone">
+      <div class="bar"><i></i></div>
+      <h3>À quels moments avez-vous envie de grignoter ?</h3>
+      <p>Plusieurs réponses possibles</p>
+      <div class="opts">
+        <div class="opt"><svg viewBox="0 0 120 100"><use href="#soleil" x="76" y="4" width="34" height="34"/><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--sable)"/><use href="#calme" x="14" y="18" width="92" height="78"/></svg>Le matin</div>
+        <div class="opt"><svg viewBox="0 0 120 100"><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--peche)"/><use href="#tendu" x="14" y="18" width="92" height="78"/></svg>L'après-midi</div>
+        <div class="opt on"><svg viewBox="0 0 120 100"><rect x="18" y="8" width="84" height="50" rx="10" fill="#DCE7F2"/><use href="#galet" x="22" y="34" width="76" height="64" style="color:var(--brume)"/><use href="#dort" x="22" y="34" width="76" height="64"/></svg>Le soir devant la télé</div>
+        <div class="opt on"><svg viewBox="0 0 120 100"><use href="#lune" x="80" y="2" width="30" height="30"/><use href="#galet" x="14" y="18" width="92" height="78" style="color:var(--lavande)"/><use href="#dort" x="14" y="18" width="92" height="78"/></svg>Tard le soir ou la nuit</div>
+        <div class="opt wide"><svg viewBox="0 0 120 100"><use href="#galet" style="color:var(--sauge)"/><use href="#calme"/></svg>Je ne grignote presque jamais</div>
+      </div>
+    </div>
+    <div class="card">
+      <svg viewBox="0 0 160 110"><use href="#ondes" x="10" y="68" width="140" height="36"/><use href="#galet" x="34" y="6" width="92" height="78" style="color:#fff"/><use href="#calme" x="34" y="6" width="92" height="78"/></svg>
+      <small>Jour 10 · 20 min</small>
+      <b>Je cesse de nourrir mes émotions</b>
+    </div>
+  </div>
+</div>
+</body></html>

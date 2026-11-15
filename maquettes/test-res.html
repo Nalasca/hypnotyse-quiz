@@ -1,0 +1,12 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Test res-poids</title>
+<style>body{margin:0;background:#fff}</style></head>
+<body>
+<div id="mount"></div>
+<script>
+/* charge le bloc Systeme.io tel quel, comme le ferait la page, pour le vérifier en local */
+fetch('/systeme/res-poids.html').then(function(r){ return r.text(); }).then(function(html){
+  var m = document.getElementById('mount'); m.innerHTML = html;
+  m.querySelectorAll('script').forEach(function(s){ var n = document.createElement('script'); n.textContent = s.textContent; document.body.appendChild(n); });
+});
+</script>
+</body></html>

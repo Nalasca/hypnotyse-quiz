@@ -1,0 +1,144 @@
+<!-- ============================================================
+  HYPNOTYSE · pages de paiement · bloc du HAUT (version Les galets)
+  À coller dans le bloc Code HTML situé sous le logo, à la place du bloc
+  actuel ("CONFIGURATION · PAGE ..."). Même bloc sur les deux pages :
+  mettre formule : 'annuel' ou 'mensuel' ci-dessous.
+  Contient aussi : le pré-remplissage email + prénom (RPC quiz_get avec
+  le sid de l'URL), la mesure checkout_view / checkout_submit, et
+  l'habillage des champs du formulaire Systeme.io.
+============================================================ -->
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600&display=swap" rel="stylesheet">
+<style>
+#hyp, #hyp *{box-sizing:border-box;margin:0;padding:0}
+#hyp{--ink:#1D2321;--muted:#68716C;--line:#ECEDEB;--soft:#F6F7F5;--brand:#2E7D5E;--sauge:#BCD9C5;--sauge-bg:#E5F2EA;--lavande:#CEC7EF;
+  font-family:'Lexend',system-ui,sans-serif;font-size:16px;line-height:1.5;color:var(--ink);-webkit-font-smoothing:antialiased;max-width:560px;margin:0 auto;padding:4px 20px 8px}
+#hyp .back{background:none;border:0;font:inherit;font-size:14px;color:var(--muted);cursor:pointer;padding:0 0 10px;display:inline-flex;align-items:center;gap:6px}
+#hyp h1{font-size:26px;line-height:1.2;font-weight:600;letter-spacing:-.015em;margin-bottom:6px}
+#hyp .sub{color:var(--muted);margin-bottom:16px}
+#hyp .card{border:1.5px solid var(--line);border-radius:20px;padding:16px;display:flex;gap:14px;align-items:flex-start}
+#hyp .card svg{width:64px;height:54px;flex-shrink:0}
+#hyp .tl{display:flex;flex-direction:column;gap:9px;flex:1}
+#hyp .tl div{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;color:var(--muted)}
+#hyp .tl b{color:var(--ink);font-weight:600}
+#hyp .tl span.v{white-space:nowrap;font-weight:600;color:var(--ink)}
+#hyp .tl span.v.free{color:var(--brand)}
+#hyp .incl{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13.5px;color:var(--muted);margin:12px 2px 0}
+#hyp .incl span::before{content:'✓ ';color:var(--brand);font-weight:700}
+#hyp .wa{display:flex;gap:12px;align-items:center;background:var(--sauge-bg);border-radius:16px;padding:12px 14px;margin-top:12px;font-size:14.5px}
+#hyp .wa b{font-weight:600}
+#hyp .wa svg{width:40px;height:34px;flex-shrink:0}
+#hyp .next{font-size:13.5px;color:var(--muted);text-align:center;margin-top:16px}
+@media(min-width:600px){#hyp h1{font-size:30px}}
+
+/* ---- habillage du formulaire Systeme.io (champs, bouton) ---- */
+form input[type="text"], form input[type="email"], form input[type="tel"], form select{
+  font-family:'Lexend',system-ui,sans-serif!important;font-size:16px!important;border-radius:14px!important;border:1.5px solid #ECEDEB!important;
+  min-height:52px!important;padding-left:14px!important;padding-right:14px!important;color:#1D2321!important;box-shadow:none!important}
+form input:focus, form select:focus{border-color:#1D2321!important;outline:none!important}
+form input::placeholder{color:#8A938E!important}
+</style>
+
+<div id="hyp">
+  <button class="back" id="hyp-back" type="button">‹ Retour</button>
+  <h1 id="hyp-h1">Dernière étape : créez votre accès</h1>
+  <p class="sub" id="hyp-sub">Rien n'est débité aujourd'hui. Vous écoutez la première séance ce soir.</p>
+
+  <div class="card">
+    <svg viewBox="0 0 120 100"><use href="#hp-galet" x="14" y="18" width="92" height="78" style="color:#fff"/><use href="#hp-calme" x="14" y="18" width="92" height="78"/><use href="#hp-casque" x="14" y="18" width="92" height="78"/></svg>
+    <div class="tl" id="hyp-tl"></div>
+  </div>
+  <div class="incl"><span>21 séances enregistrées par Didier</span><span>Cycles renouvelables</span><span>Annulable en 2 clics</span></div>
+  <div class="wa">
+    <svg viewBox="0 0 120 100"><use href="#hp-galet" style="color:#fff"/><use href="#hp-calme"/></svg>
+    <span><b>Suivi personnalisé sur WhatsApp, offert.</b> Indiquez votre numéro ci-dessous pour que Didier puisse vous accompagner.</span>
+  </div>
+  <p class="next">Vos informations, puis votre moyen de paiement ↓</p>
+</div>
+
+<script>
+(function(){
+  /* ===================== RÉGLAGES ===================== */
+  var CFG = {
+    formule      : 'annuel',   /* 'annuel' sur la page annuelle, 'mensuel' sur la page mensuelle */
+    prix_an      : 89.90,
+    prix_mensuel : 19.90,
+    essai_jours  : 7
+  };
+  /* ==================================================== */
+  var SB_URL = 'https://ydyogdzwdudmuzbpsozz.supabase.co';
+  var SB_KEY = 'sb_publishable_W8FTMb_XDkEKO4XbRRB7CQ_YJEURUS-';
+  var ANNUEL = CFG.formule !== 'mensuel';
+  var PAGE = ANNUEL ? 'checkout_annuel' : 'checkout_mensuel';
+
+  var sprite = document.createElement('div'); sprite.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+  sprite.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg"><defs>'
+    + '<symbol id="hp-galet" viewBox="0 0 120 100"><ellipse cx="62" cy="93" rx="36" ry="4" fill="#1D2321" opacity=".07"/><path d="M17 60C14 37 38 19 64 19c28 0 47 16 45 39-2 22-22 32-48 32-27 0-41-9-44-30z" fill="currentColor"/><ellipse cx="45" cy="35" rx="15" ry="5.5" transform="rotate(-14 45 35)" fill="#fff" opacity=".38"/></symbol>'
+    + '<symbol id="hp-calme" viewBox="0 0 120 100"><g fill="none" stroke="#1D2321" stroke-width="3" stroke-linecap="round"><path d="M45 57q6 6 12 0"/><path d="M71 57q6 6 12 0"/><path d="M58 68q6 5 12 0"/></g><circle cx="42" cy="67" r="4.5" fill="#EE9C88" opacity=".55"/><circle cx="87" cy="67" r="4.5" fill="#EE9C88" opacity=".55"/></symbol>'
+    + '<symbol id="hp-casque" viewBox="0 0 120 100"><path d="M27 52C27 16 95 16 95 52" fill="none" stroke="#1D2321" stroke-width="5" stroke-linecap="round"/><rect x="17" y="46" width="15" height="24" rx="6" fill="#1D2321"/><rect x="90" y="46" width="15" height="24" rx="6" fill="#1D2321"/></symbol>'
+    + '</defs></svg>';
+  document.body.appendChild(sprite);
+
+  var $ = function(id){ return document.getElementById(id); };
+  var eur = function(n){ return n.toFixed(2).replace('.', ',').replace(/,00$/, '') + ' €'; };
+  var cap = function(s){ s = String(s || '').trim(); return s.charAt(0).toUpperCase() + s.slice(1); };
+  var fr = function(d){ return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' }); };
+  var esc = function(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+
+  var q = new URLSearchParams(location.search);
+  var sid = q.get('sid') || ''; if (!/^[0-9a-f-]{36}$/i.test(sid)) sid = '';
+  var prenom = cap(q.get('prenom'));
+  var fbclid = q.get('fbclid') || '';
+  try { if (fbclid) localStorage.setItem('hy_fbclid', fbclid); } catch(e){}
+
+  /* calendrier */
+  var now = new Date(), tl = $('hyp-tl');
+  if (ANNUEL) {
+    tl.innerHTML = '<div><span><b>Aujourd\'hui</b> · accès complet</span><span class="v free">0 €</span></div>'
+      + '<div><span><b>Le ' + fr(new Date(now.getTime() + (CFG.essai_jours - 2) * 864e5)) + '</b> · email de rappel</span><span class="v"></span></div>'
+      + '<div><span><b>Le ' + fr(new Date(now.getTime() + CFG.essai_jours * 864e5)) + '</b> · l\'abonnement démarre, sauf si vous avez annulé</span><span class="v">' + eur(CFG.prix_an) + '</span></div>';
+  } else {
+    $('hyp-sub').textContent = 'Accès immédiat, sans engagement. Vous écoutez la première séance ce soir.';
+    tl.innerHTML = '<div><span><b>Aujourd\'hui</b> · accès complet, première séance ce soir</span><span class="v">' + eur(CFG.prix_mensuel) + '</span></div>'
+      + '<div><span><b>Chaque mois</b> · renouvelé tant que vous continuez</span><span class="v">' + eur(CFG.prix_mensuel) + '</span></div>'
+      + '<div><span><b>Quand vous voulez</b> · annulation en 2 clics</span><span class="v"></span></div>';
+  }
+  if (prenom) $('hyp-h1').textContent = prenom + ', dernière étape : créez votre accès';
+
+  /* retour */
+  $('hyp-back').addEventListener('click', function(){ if (history.length > 1) history.back(); else location.href = 'https://app.hypnotyse.com/res-poids' + (sid ? '?sid=' + sid + (prenom ? '&prenom=' + encodeURIComponent(prenom) : '') : ''); });
+
+  /* mesure + pré-remplissage */
+  function rpc(name, body, keepalive){ return fetch(SB_URL + '/rest/v1/rpc/' + name, { method: 'POST', keepalive: !!keepalive, headers: { 'apikey': SB_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+  function track(event, meta, keepalive){ if (!sid) return; try { rpc('funnel_track', { p_sid: sid, p_event: event, p_page: PAGE, p_meta: meta || {} }, keepalive).catch(function(){}); } catch(e){} }
+  track('checkout_view');
+  try { window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event: 'checkout_view', plan: ANNUEL ? 'annuel' : 'mensuel', session_id: sid, quiz_type: 'poids' }); } catch(e){}
+
+  /* le formulaire est en React : passer par le setter natif pour que la valeur soit vraiment enregistrée */
+  function setVal(input, v){
+    var t = input._valueTracker; if (t) t.setValue('');
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, v);
+    input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  function fill(d){
+    var p = cap(d.prenom || prenom), email = String(d.email || '').trim(), n = 0;
+    (function go(){
+      var em = document.querySelector('input[name="email"]'), fn = document.querySelector('input[name="first_name"]');
+      if ((!em || !fn) && n++ < 30) { setTimeout(go, 300); return; }
+      if (em && email && !em.value) setVal(em, email);
+      if (fn && p && (!fn.value || fn.value.toLowerCase() === p.toLowerCase())) setVal(fn, p);
+    })();
+  }
+  if (sid) rpc('quiz_get', { p_id: sid }).then(function(r){ return r.ok ? r.json() : null; }).then(function(d){ fill(d || {}); }).catch(function(){ fill({}); });
+  else fill({});
+
+  var sent = false;
+  document.addEventListener('click', function(e){
+    var b = e.target && e.target.closest ? e.target.closest('button[type="submit"]') : null;
+    if (!b || sent || /appliquer/i.test(b.innerText)) return;
+    sent = true;
+    var tel = document.querySelector('input[type="tel"]');
+    track('checkout_submit', { whatsapp: !!(tel && tel.value.replace(/\D/g, '').length >= 8) }, true);
+    try { window.dataLayer.push({ event: 'checkout_submit', plan: ANNUEL ? 'annuel' : 'mensuel', session_id: sid, quiz_type: 'poids' }); } catch(e){}
+  }, true);
+})();
+</script>

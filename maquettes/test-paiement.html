@@ -1,0 +1,29 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Test paiement</title>
+<style>
+body{margin:0;background:#fff;font-family:system-ui}
+.logo{text-align:center;padding:18px 0 6px}.logo img{height:22px}
+/* imitation grossière du formulaire Systeme.io pour vérifier l'habillage et le pré-remplissage */
+form{max-width:560px;margin:0 auto;padding:0 20px}
+form .r{display:flex;gap:10px;margin-bottom:10px}form .r>*{flex:1}
+form input,form select{width:100%;height:44px;border:1px solid #ddd;border-radius:6px;padding:0 10px;font-size:16px}
+form .pay{border:1px solid #ddd;border-radius:14px;padding:14px;margin:10px 0;color:#666;font-size:14px}
+form button[type=submit]{width:100%;height:56px;border:0;border-radius:999px;background:#2E7D5E;color:#fff;font:600 17px Lexend,sans-serif;margin-top:8px}
+</style></head>
+<body>
+<div class="logo"><img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/66282a0a72878_logo_hypnotyse1.png" alt="Hypnotyse"></div>
+<div id="haut"></div>
+<form onsubmit="return false">
+  <div class="r"><input name="first_name" placeholder="Prénom"><input name="surname" placeholder="Nom"></div>
+  <div class="r"><input name="email" type="email" placeholder="Adresse email"><input type="tel" placeholder="WhatsApp (pour votre suivi)"></div>
+  <select><option>France</option></select>
+  <div class="pay">Mode de paiement · Carte · Klarna · PayPal</div>
+  <button type="submit">Démarrer l'essai gratuit</button>
+</form>
+<div id="bas"></div>
+<script>
+function load(url, id){ return fetch(url).then(function(r){ return r.text(); }).then(function(html){
+  var m = document.getElementById(id); m.innerHTML = html;
+  m.querySelectorAll('script').forEach(function(s){ var n = document.createElement('script'); n.textContent = s.textContent; document.body.appendChild(n); }); }); }
+load('/systeme/paiement-haut.html', 'haut').then(function(){ return load('/systeme/paiement-bas.html', 'bas'); });
+</script>
+</body></html>
