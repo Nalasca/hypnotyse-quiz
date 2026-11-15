@@ -53,8 +53,10 @@
 #hy .guide b{display:block;font-weight:600;font-size:17px}
 #hy .guide span{font-size:13.5px;color:var(--muted)}
 #hy .guide p{font-size:15.5px}
-#hy .player{display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 14px;margin-top:14px;cursor:pointer;border:1.5px solid var(--line);width:100%;text-align:left;font-family:inherit}
-#hy .play{width:44px;height:44px;border-radius:50%;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+#hy .player{display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 14px;margin-top:14px;cursor:pointer;border:1.5px solid var(--line);width:100%;text-align:left!important;font-family:inherit}
+#hy .play{width:44px;height:44px;border-radius:50%;background:var(--brand)!important;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#hy .play svg{width:18px;height:18px;display:block}
+#hy .play svg *{fill:#fff}
 #hy .player small{display:block;font-size:12.5px;color:var(--muted)}
 #hy .player b{display:block;font-weight:600;font-size:15px;line-height:1.3;color:var(--ink)}
 #hy .player .track{height:4px;background:var(--soft);border-radius:2px;margin-top:7px;overflow:hidden}
@@ -165,7 +167,7 @@
         </div>
         <p>L'un des précurseurs de l'hypnose au bloc opératoire, il l'enseigne aujourd'hui aux soignants pour accompagner les patients. Il a enregistré lui-même chaque séance du programme et vous suit sur WhatsApp.</p>
         <button class="player" id="hy-player" type="button">
-          <span class="play" id="hy-play">▶</span>
+          <span class="play" id="hy-play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
           <span style="flex:1"><small>Extrait gratuit</small><b>Écoutez Didier vous présenter la méthode</b><span class="track"><i id="hy-track"></i></span></span>
         </button>
         <audio id="hy-audio" preload="none" src="https://d1yei2z3i6k35z.cloudfront.net/5753843/6618ee047c843_INTRODUCTION_FINALE.mp3"></audio>
@@ -458,8 +460,9 @@
   $('hy-player').addEventListener('click', function(){
     if (playing) { au.pause(); } else { au.play(); track('audio_play'); }
   });
-  au.addEventListener('play', function(){ playing = true; txt('hy-play', '❚❚'); });
-  au.addEventListener('pause', function(){ playing = false; txt('hy-play', '▶'); });
+  var ICO_PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>', ICO_PAUSE = '<svg viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+  au.addEventListener('play', function(){ playing = true; $('hy-play').innerHTML = ICO_PAUSE; });
+  au.addEventListener('pause', function(){ playing = false; $('hy-play').innerHTML = ICO_PLAY; });
   au.addEventListener('timeupdate', function(){
     if (au.duration) $('hy-track').style.width = (au.currentTime / au.duration * 100) + '%';
     if (!fired30 && au.currentTime >= 30) { fired30 = true; track('audio_30s'); }
