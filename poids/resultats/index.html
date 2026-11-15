@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vos résultats | Hypnotyse</title>
+<meta name="robots" content="noindex">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TGSR3C3K');</script>
+<!-- End Google Tag Manager -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/styles.css">
+<link rel="stylesheet" href="/assets/resultats.css">
+</head>
+<body class="res">
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGSR3C3K"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<div class="wrap">
+  <div class="top"><div class="logo">Hypno<span>tyse</span></div></div>
+
+  <!-- 1. Le verdict, tout de suite -->
+  <section class="hero center">
+    <div class="badge">Votre bilan est prêt</div>
+    <h1 id="heroTitle">Ce qui bloque vraiment <em>vos efforts</em></h1>
+    <p class="sub" id="heroSub">Vos réponses montrent que vos envies de manger ne viennent pas d'un manque de volonté, mais d'automatismes installés depuis longtemps. C'est exactement ce que l'autohypnose permet de défaire.</p>
+    <a class="cta green" href="#offre" data-cta="hero">Commencer mes 7 jours offerts</a>
+    <div class="cta-note"><span>0 € aujourd'hui</span><span>Annulable en 2 clics</span><span>Suivi WhatsApp</span></div>
+    <div class="chips" id="chips" hidden></div>
+  </section>
+
+  <!-- 2. Le diagnostic personnalisé -->
+  <section id="diag" hidden>
+    <div class="eyebrow">Votre diagnostic</div>
+    <h2 id="diagTitle">Les 3 mécanismes à <em>reprogrammer</em></h2>
+    <p>Calculé à partir de vos réponses. Plus la barre est haute, plus ce mécanisme pèse dans vos craquages.</p>
+    <div id="mecas"></div>
+    <div class="quote-box" id="moments" hidden>
+      <div class="k">Vos moments à risque</div>
+      <p id="momentsTxt"></p>
+    </div>
+  </section>
+
+  <!-- 3. Didier et sa voix : la preuve avant la carte bancaire -->
+  <section>
+    <div class="didier">
+      <div class="didier-id">
+        <img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/6772f75427e33_didier.png" alt="Didier Cantié" width="72" height="72">
+        <div><strong>Didier Cantié</strong><small>Infirmier anesthésiste de formation, hypnothérapeute, plus de 20 ans d'expérience</small></div>
+      </div>
+      <p>Didier a conçu et enregistré lui-même chaque séance du programme, pour agir sur ce que les régimes ne touchent jamais : les automatismes qui déclenchent l'envie de manger.</p>
+      <button class="player" id="player" type="button" aria-label="Écouter Didier">
+        <span class="play" id="playIco">▶</span>
+        <span class="lbl">Écoutez Didier vous présenter le programme<small id="playDur">Mettez vos écouteurs si vous le pouvez</small><span class="track"><i id="playBar"></i></span></span>
+      </button>
+      <audio id="audio" preload="none" src="https://d1yei2z3i6k35z.cloudfront.net/5753843/6618ee047c843_INTRODUCTION_FINALE.mp3"></audio>
+    </div>
+  </section>
+
+  <!-- 4. Le plan : concret, sans promesse chiffrée -->
+  <section>
+    <div class="eyebrow">Votre programme</div>
+    <h2 id="planTitle">Vos <em>21 premiers jours</em></h2>
+    <p>Une séance guidée de 20 minutes par jour. Vous vous allongez, vous écoutez, votre inconscient fait le travail.</p>
+    <div class="weeks">
+      <div class="week"><div class="n">S1</div><div><strong id="w1t">Apaiser les envies</strong><p id="w1p">Les premières séances installent un état de calme et désamorcent le réflexe qui pousse vers la nourriture quand la tension monte.</p></div></div>
+      <div class="week"><div class="n">S2</div><div><strong>Séparer émotions et nourriture</strong><p>Votre cerveau apprend à faire la différence entre la faim du corps et le besoin d'apaisement. Le grignotage perd de sa force.</p></div></div>
+      <div class="week"><div class="n">S3</div><div><strong>Ancrer vos nouveaux réflexes</strong><p>Les nouvelles habitudes deviennent automatiques. Vous ne luttez plus : vous n'avez simplement plus la même envie.</p></div></div>
+    </div>
+    <div class="rdv" id="rdv"><b>🌙</b><span id="rdvTxt">Vos séances s'écoutent au moment qui vous convient, sur téléphone, tablette ou ordinateur.</span></div>
+  </section>
+
+  <!-- 5. Preuve sociale -->
+  <section>
+    <div class="eyebrow">Elles ont commencé comme vous</div>
+    <h2>« J'avais <em>tout essayé</em> »</h2>
+    <div class="proof"><span class="stars">★★★★★</span><span>Plus de 1 300 programmes déjà commandés</span></div>
+    <div class="avis"><div class="who"><div class="av">M</div><div><strong>Manon</strong><small>après 3 cycles</small></div></div><div class="stars">★★★★★</div><p>« Après avoir testé plusieurs méthodes différentes, je reprenais les kilos perdus au bout de quelques semaines ! J'ai perdu 6 kg et je n'ai plus les compulsions sucrées en fin de journée. (…) Je recommande vivement ! »</p></div>
+    <div class="avis"><div class="who"><div class="av">E</div><div><strong>Estelle</strong><small>après le premier cycle de 21 jours</small></div></div><div class="stars">★★★★★</div><p>« Une expérience relaxante, efficace et sans réel effort. (…) Au-delà de ces kilos, c'est le sentiment de retrouver enfin une vie saine qui m'apporte le plus grand bien, et de ne plus me sentir soumise aux pulsions alimentaires incontrôlables. Il n'y a aucun régime ou effort, ça se fait naturellement. »</p></div>
+    <div class="avis"><div class="who"><div class="av">C</div><div><strong>Corinne</strong><small>au 17e jour</small></div></div><div class="stars">★★★★★</div><p>« C'est la première fois que je ressens des choses avec l'hypnose et la voix de Didier nous berce. J'en suis au 17e jour, j'ai perdu 2 kg, je me sens moins frustrée si je fais un écart et pratiquement plus de grignotage. »</p></div>
+    <div class="avis"><div class="who"><div class="av">É</div><div><strong>Éloïse</strong><small>après 2 semaines</small></div></div><div class="stars">★★★★★</div><p>« J'ai perdu 2 kilos et une taille de pantalon, chose que je pensais impossible. C'est la première fois que je parviens à perdre du poids. Hypnotyse traite vraiment le problème à la racine. »</p></div>
+    <div class="disclaimer">Témoignages réels de membres. Les résultats varient d'une personne à l'autre.</div>
+  </section>
+
+  <!-- 6. L'offre -->
+  <section id="offre">
+    <div class="eyebrow center">Votre accès au programme</div>
+    <h2 class="center" id="offreTitle">Commencez <em>sans risque</em></h2>
+    <p class="center">Une seule séance chez un hypnothérapeute coûte de 80 à 150 €. Ici, le programme complet revient à moins de 25 centimes par jour.</p>
+
+    <div class="offer">
+      <div class="ribbon">7 jours offerts</div>
+      <div class="name">Formule annuelle · la plus choisie</div>
+      <div class="price"><b>7,49 €</b><span>/mois</span><s>19,90 €/mois</s></div>
+      <div class="bill">Soit 89,90 € par an, prélevés seulement après vos 7 jours d'essai</div>
+      <div class="timeline">
+        <div><b>Aujourd'hui · 0 €</b><br>Accès complet, vous écoutez votre première séance ce soir</div>
+        <div><b>Jour 5</b><br>Un email vous rappelle la fin de l'essai</div>
+        <div><b>Jour 8 · 89,90 €</b><br>Votre année démarre, sauf si vous avez annulé en 2 clics</div>
+      </div>
+      <ul class="incl">
+        <li>Le programme complet : 21 séances guidées par cycle, adaptées à votre profil</li>
+        <li class="wa"><span><strong>Suivi personnalisé sur WhatsApp</strong> pendant tout le programme : vous posez vos questions, on vous accompagne</span></li>
+        <li>Plus de 7 heures d'audio bonus : grignotage, sucre, émotions, estime de soi</li>
+        <li>Cycles renouvelables autant de fois que vous le souhaitez pendant un an</li>
+        <li>Sur téléphone, tablette et ordinateur, 24 h/24</li>
+      </ul>
+      <a class="cta green" id="ctaAnnuel" data-cta="annuel" href="https://app.hypnotyse.com/paiement-poids-annuel">Commencer mes 7 jours offerts</a>
+      <div class="secure"><span>🔒 Paiement sécurisé Stripe</span><span>Aucun débit aujourd'hui</span></div>
+    </div>
+
+    <div class="offer2">
+      <div class="name">Formule mensuelle</div>
+      <div class="price"><b>19,90 €</b><span>/mois</span></div>
+      <div class="bill">Sans période d'essai, sans engagement, annulable à tout moment. Idéal pour faire un premier cycle de 21 jours.</div>
+      <a class="cta light" id="ctaMensuel" data-cta="mensuel" href="https://app.hypnotyse.com/paiement-poids-mensuel">Choisir la formule mensuelle</a>
+    </div>
+  </section>
+
+  <!-- 7. Comparatif -->
+  <section>
+    <h2 class="center">Pourquoi ça peut <em>enfin tenir</em></h2>
+    <table class="cmp">
+      <thead><tr><th></th><th class="us">Hypnotyse</th><th>Régime</th><th>Appli</th></tr></thead>
+      <tbody>
+        <tr><td>Agit sur la cause des envies</td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td></tr>
+        <tr><td>Sans privation ni calcul</td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td></tr>
+        <tr><td>20 minutes, allongée</td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td></tr>
+        <tr><td>Suivi personnalisé</td><td class="y">✓</td><td class="n">✗</td><td class="n">✗</td></tr>
+        <tr><td>Essai gratuit</td><td class="y">✓</td><td class="n">✗</td><td class="n">±</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 8. Objections -->
+  <section class="faq">
+    <h2 class="center">Vos <em>questions</em></h2>
+    <details><summary>Comment fonctionne l'essai gratuit de 7 jours ?</summary><p>Avec la formule annuelle, vous accédez immédiatement à tout le programme. Pendant 7 jours, rien n'est débité. Un email vous prévient au 5e jour. Si vous continuez, l'abonnement démarre au 8e jour. Si vous annulez avant, il ne se passe rien : aucun débit, aucune question.</p></details>
+    <details><summary>Je n'ai jamais fait d'hypnose. Est-ce que ça marchera ?</summary><p>Oui. Vous n'avez rien à faire de particulier : vous écoutez et vous suivez la voix de Didier. L'autohypnose est un état naturel, proche de celui qui précède le sommeil. Aucune croyance n'est nécessaire, et la plupart des membres ressentent un effet dès la première séance.</p></details>
+    <details><summary>Dois-je suivre un régime en parallèle ?</summary><p>Non. Le programme agit sur vos envies, pas sur votre assiette. Beaucoup de membres constatent qu'ils mangent mieux et moins, sans frustration et sans compter une seule calorie.</p></details>
+    <details><summary>Combien de temps avant de sentir une différence ?</summary><p>La plupart des membres remarquent un changement dans leurs envies au cours de la première ou de la deuxième semaine. Chaque personne avance à son rythme.</p></details>
+    <details><summary>À quoi sert mon numéro de téléphone ?</summary><p>Uniquement à votre suivi personnalisé sur WhatsApp : vous pouvez poser vos questions et être accompagnée pendant tout le programme. Il n'est jamais partagé.</p></details>
+    <details><summary>Puis-je annuler facilement ?</summary><p>Oui, en 2 clics depuis votre espace membre. Pendant l'essai, vous n'êtes jamais débitée. La formule mensuelle est sans engagement : l'accès reste actif jusqu'à la fin de la période payée.</p></details>
+    <details><summary>Est-ce que c'est adapté à tout le monde ?</summary><p>L'autohypnose est déconseillée aux personnes diagnostiquées avec des troubles psychotiques ou une schizophrénie. Le programme ne remplace pas un avis médical : en cas de doute, parlez-en à votre médecin.</p></details>
+    <a class="cta green" href="#offre" data-cta="faq">Commencer mes 7 jours offerts</a>
+  </section>
+
+  <div class="foot">
+    Hypnotyse · <a href="https://www.hypnotyse.com/cgv" target="_blank" rel="noopener">CGV</a> · <a href="https://hypnotyse.com/mentions-legales/" target="_blank" rel="noopener">Mentions légales</a><br>
+    L'autohypnose ne remplace pas un avis médical.
+  </div>
+</div>
+
+<div class="sticky" id="sticky" aria-hidden="true">
+  <div class="sticky-in">
+    <div><b>7 jours offerts</b>0 € aujourd'hui, annulable en 2 clics</div>
+    <a class="cta green" href="#offre" data-cta="sticky">J'essaie</a>
+  </div>
+</div>
+
+<script src="/poids/resultats/resultats.js"></script>
+</body>
+</html>

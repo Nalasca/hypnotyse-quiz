@@ -37,6 +37,8 @@ Ce quiz remplace l'ancien formulaire Tally. Objectifs : s'affranchir de l'abonne
 - `poids/quiz.js` : définition du quiz poids (étapes, calculs, écrans custom rea1/rea2/rea3/rythme, completionFields, redirectParams)
 - `poids/index.html` : coquille HTML qui charge quiz.js puis engine.js
 - `vercel.json` : redirection `/` → `/poids`
+- `poids/resultats/` (+ `assets/resultats.css`) : page de résultats et de vente hébergée ici (variante B du test A/B), lit `quiz_get(sid)`, trace chaque étape via la RPC `funnel_track` (table `funnel_events`, liste fermée d'événements), renvoie vers le paiement Systeme.io avec prenom, sid, fbclid (jamais l'email dans l'URL : Meta interdit les données perso dans les URL). Aucune promesse chiffrée de perte de poids ni de taux de réussite.
+- Test A/B des résultats piloté depuis `quiz_config` : `redirect_url_results_poids_b` (URL de la variante B) et `ab_resultats_poids` (part du trafic envoyée en B, 0 à 100). La variante part dans `funnel_events` (événement `results_redirect`) et se lit aussi dans `redirect_url`.
 - Nouveau quiz = un dossier (tabac/, sommeil/...) avec index.html + quiz.js, le moteur est réutilisé tel quel
 
 ## Logique du quiz poids

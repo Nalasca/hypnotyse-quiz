@@ -324,10 +324,14 @@ function renderScale(step) {
 function renderEmail() {
   fill.style.width = "97%";
   plabel.textContent = "Dernière étape";
+  /* Un aperçu du profil avant de demander l'email : la personne voit que son
+     bilan existe vraiment, ce qui rend l'échange plus juste. */
+  const teaser = QUIZ.emailTeaser ? QUIZ.emailTeaser(state) : "";
   app.innerHTML = `
     <div class="eyebrow">Votre bilan est prêt</div>
+    ${teaser}
     <h1>Où souhaitez-vous <em>recevoir</em> vos résultats ?</h1>
-    <div class="sub">Votre profil personnalisé et votre programme recommandé vous attendent sur la page suivante.</div>
+    <div class="sub">Votre profil complet et votre programme recommandé vous attendent sur la page suivante.</div>
     <div class="field"><label for="fPrenom">Votre prénom</label>
       <input id="fPrenom" type="text" autocomplete="given-name" placeholder="Marie"></div>
     <div class="field"><label for="fEmail">Votre adresse email</label>
@@ -354,13 +358,28 @@ function renderEmail() {
     /* URL de résultats : clé spécifique au quiz si présente, sinon clé globale.
        Seuls sid, prenom et fbclid passent dans l'URL : la page de résultats
        récupère les réponses via la RPC quiz_get(sid). */
-    const base = CONFIG["redirect_url_results_" + QUIZ.type] || CONFIG.redirect_url_results;
+    /* Test A/B de la page de résultats, piloté depuis quiz_config sans
+       redéploiement : redirect_url_results_<type>_b donne l'URL de la variante B,
+       ab_resultats_<type> la part de trafic qui y part (0 à 100). Sans ces clés,
+       tout le monde va sur la page habituelle. La variante se retrouve ensuite
+       dans redirect_url (colonne et webhook) et dans funnel_events. */
+    const baseA = CONFIG["redirect_url_results_" + QUIZ.type] || CONFIG.redirect_url_results;
+    const baseB = CONFIG["redirect_url_results_" + QUIZ.type + "_b"];
+    const partB = Number(CONFIG["ab_resultats_" + QUIZ.type]) || 0;
+    const variante = (baseB && partB > 0 && Math.random() * 100 < partB) ? "B" : "A";
+    const base = variante === "B" ? baseB : baseA;
     const r = new URLSearchParams({ sid: sessionId, prenom: prenom });
     if (fbclid) r.set("fbclid", fbclid);
     const target = base + "?" + r.toString();
 
     trackLead();
-    dlPush("quiz_complete", Object.assign({ email: email, prenom: prenom }, clickIds));
+    dlPush("quiz_complete", Object.assign({ email: email, prenom: prenom, variante_resultats: variante }, clickIds));
+    try {
+      fetch(SUPABASE_URL + "/rest/v1/rpc/funnel_track", {
+        method: "POST", headers: SB_HEADERS, keepalive: true,
+        body: JSON.stringify({ p_sid: sessionId, p_event: "results_redirect", p_page: "quiz_" + QUIZ.type, p_variant: variante, p_meta: {} })
+      }).catch(() => {});
+    } catch(e) {}
     /* completed_at déclenche côté Supabase le webhook (table quiz_config, clé webhook_url)
        qui reçoit toute la ligne, redirect_url comprise */
     saveProgress(Object.assign({

@@ -257,11 +257,31 @@
     { id:"email", type:"email" }
   ];
 
+  /* Frein principal déduit des réponses. Même logique que la page de résultats
+     (poids/resultats/resultats.js) : les deux doivent annoncer la même chose. */
+  function freinPrincipal(state) {
+    const a = state.answers;
+    const sucre = Number(a.sucre) || 0, stress = Number(a.stress) || 0, echec = Number(a.echec) || 0;
+    const soir = [].concat(a.moments_grignotage || []).some(m => /soir|nuit/i.test(m));
+    if (stress >= 4 && soir) return "le grignotage émotionnel du soir";
+    if (stress >= 4) return "l'alimentation émotionnelle";
+    if (sucre >= 4) return "les envies de sucre";
+    if (echec >= 4) return "le cercle écart et culpabilité";
+    if (soir) return "le grignotage du soir";
+    if (/grignotage/i.test(a.obstacle_percu || "")) return "le grignotage et les envies";
+    return "des automatismes alimentaires";
+  }
+
+  function emailTeaser(state) {
+    return `<div class="teaser"><span>Votre frein principal</span><strong>${freinPrincipal(state)}</strong></div>`;
+  }
+
   /* ---------- Définition lue par le moteur ---------- */
   window.QUIZ = {
     type: "poids",
     totalQuestions: 15,
     steps: STEPS,
+    emailTeaser,
 
     /* Écran de processing affiché après la capture email, avant la redirection */
     processingSteps: [
