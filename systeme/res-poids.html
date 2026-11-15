@@ -11,7 +11,7 @@
 #hy{--ink:#1D2321;--muted:#68716C;--line:#ECEDEB;--soft:#F6F7F5;--brand:#2E7D5E;
   --sauge:#BCD9C5;--lavande:#CEC7EF;--peche:#F4C9B5;--brume:#BFD4E8;--sable:#EAD9C2;
   --sauge-bg:#E5F2EA;--lavande-bg:#EEECFA;--peche-bg:#FCEDE4;--brume-bg:#E6EFF9;
-  font-family:'Lexend',system-ui,sans-serif;font-size:16px;line-height:1.55;color:var(--ink);background:#fff;
+  font-family:'Lexend',system-ui,sans-serif;font-size:16px;line-height:1.55;color:var(--ink);background:#fff;text-align:left;
   -webkit-font-smoothing:antialiased;width:100%;padding-bottom:96px}
 #hy .wrap{max-width:560px;margin:0 auto;padding:0 20px}
 #hy .top{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 6px;max-width:600px;margin:0 auto}
@@ -63,6 +63,11 @@
 #hy .phases{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
 #hy .phases span{flex-shrink:0;font-size:13.5px;padding:8px 14px;border-radius:999px;background:var(--soft);color:var(--muted)}
 #hy .phases span.on{background:var(--ink);color:#fff}
+#hy .phases span{cursor:pointer;border:0;font-family:inherit}
+#hy .railnav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:10px}
+#hy .railnav small{font-size:13px;color:var(--muted)}
+#hy .arr{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:#fff;color:var(--ink);font:400 22px/1 'Lexend',sans-serif;cursor:pointer;margin-left:8px;display:inline-flex;align-items:center;justify-content:center;padding:0 0 2px}
+#hy .arr:disabled{opacity:.3;cursor:default}
 #hy .rail{display:flex;gap:12px;overflow-x:auto;padding:0 20px 4px;margin:0 -20px;scroll-snap-type:x mandatory;scroll-padding-left:20px;scrollbar-width:none}
 #hy .rail::-webkit-scrollbar,#hy .phases::-webkit-scrollbar{display:none}
 #hy .session{flex:0 0 200px;scroll-snap-align:start;border-radius:20px;padding:14px;display:flex;flex-direction:column}
@@ -130,11 +135,6 @@
 </style>
 
 <div id="hy">
-  <div class="top">
-    <img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/66282a0a72878_logo_hypnotyse1.png" alt="Hypnotyse">
-    <small id="hy-date"></small>
-  </div>
-
   <main class="wrap">
     <div class="art" id="hy-art"></div>
     <h1 id="hy-h1">Votre bilan est prêt. Voici ce qui freine votre perte de poids.</h1>
@@ -175,14 +175,9 @@
     <section class="sec">
       <h2>Ce que vous allez écouter</h2>
       <p class="lead">21 séances d'environ 20 minutes, en trois étapes. Un cycle dure 21 jours, vous pouvez en refaire autant que vous voulez, et le poids suit à son rythme.</p>
-      <div class="phases"><span class="on">Poser les bases</span><span>Reprendre le contrôle</span><span>Ancrer le changement</span></div>
-      <div class="rail">
-        <div class="session lav"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-calme" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 1 · 20 min</small><b>Un jour à marquer d'une pierre blanche</b></div>
-        <div class="session pec"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-envie" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 4 · 20 min</small><b>Mieux comprendre son désir de manger</b></div>
-        <div class="session sag"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-calme" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 10 · 20 min</small><b>Je cesse de nourrir mes émotions</b></div>
-        <div class="session bru"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-dort" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 19 · 20 min</small><b>Je me libère de ma culpabilité</b></div>
-        <div class="session lav"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#hg-calme" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour 21 · 20 min</small><b>Une belle image de la personne libre que je deviens</b></div>
-      </div>
+      <div class="phases" id="hy-phases"></div>
+      <div class="rail" id="hy-rail"></div>
+      <div class="railnav"><small id="hy-railhint"></small><span><button class="arr" id="hy-prev" type="button" aria-label="Séances précédentes">‹</button><button class="arr" id="hy-next" type="button" aria-label="Séances suivantes">›</button></span></div>
       <div class="rythme">
         <svg viewBox="0 0 120 100"><use href="#hg-galet" x="14" y="18" width="92" height="78" style="color:#fff"/><use href="#hg-calme" x="14" y="18" width="92" height="78"/><use href="#hg-casque" x="14" y="18" width="92" height="78"/></svg>
         <div><b id="hy-ry-t">Votre rythme : une séance par jour, au casque</b><p id="hy-ry">Environ 20 minutes, allongée, au moment qui vous convient.</p></div>
@@ -337,7 +332,42 @@
   txt('hy-bas-p', eur(CFG.prix_an) + ' par an, soit ' + eur(Math.floor(mois * 100) / 100) + ' par mois');
   txt('hy-o2-t', CFG.o2_titre); txt('hy-o2-p', CFG.o2_prix); txt('hy-o2-s', CFG.o2_sous); txt('hy-cta-mensuel', CFG.o2_bouton);
   var now = new Date();
-  txt('hy-date', 'Bilan du ' + fr(now));
+
+  /* ---- programme : 3 étapes, 21 séances (titres réels de la formation) ---- */
+  var PHASES = [
+    { nom: 'Poser les bases', jours: [1, 7], seances: ['Un jour à marquer d\'une pierre blanche', 'Ma nouvelle version de moi-même', 'Mes choix alimentaires pèsent dans la balance', 'Mieux comprendre son désir de manger', 'La juste quantité remplit mes besoins', 'Reconnaître et choisir ce qui est bon pour moi', 'Mon intuition me guide dans le choix de mes aliments'] },
+    { nom: 'Reprendre le contrôle', jours: [8, 14], seances: ['Prendre le temps de goûter ce que je mange', 'Les petits ruisseaux font les grands fleuves', 'Je cesse de nourrir mes émotions', 'Je respecte mon corps en toutes circonstances', 'Je sais maintenant faire les bons choix pour moi', 'La bonne raison qui m\'accompagne', 'Mon corps prend plaisir à bouger'] },
+    { nom: 'Ancrer le changement', jours: [15, 21], seances: ['J\'observe une nouvelle image de moi-même', 'Quand le but est clair, la voie est libre', 'Je contrôle parfaitement mes envies', 'Je goûte à l\'art de me nourrir en pleine conscience', 'Je me libère de ma culpabilité, je n\'en ai plus besoin', 'Je choisis les moments où je souhaite manger', 'Une très belle image de l\'être libre que je suis devenue'] }
+  ];
+  var COLS = ['lav', 'pec', 'sag', 'bru'], FACES = ['hg-calme', 'hg-envie', 'hg-calme', 'hg-dort'];
+  var rail = $('hy-rail'), phasesEl = $('hy-phases'), curPhase = 0;
+  function card(jour, titre, i){
+    return '<div class="session ' + COLS[i % 4] + '"><svg viewBox="0 0 120 100"><use href="#hg-galet" x="22" y="4" width="76" height="64" style="color:#fff"/><use href="#' + FACES[i % 4] + '" x="22" y="4" width="76" height="64"/><use href="#hg-ondes" x="5" y="64" width="110" height="28"/></svg><small>Jour ' + jour + ' · 20 min</small><b>' + esc(titre) + '</b></div>';
+  }
+  function showPhase(n){
+    curPhase = n; var ph = PHASES[n];
+    rail.innerHTML = ph.seances.map(function(t, i){ return card(ph.jours[0] + i, t, i); }).join('');
+    rail.scrollTo({ left: 0 });
+    phasesEl.querySelectorAll('span').forEach(function(s, i){ s.classList.toggle('on', i === n); });
+    txt('hy-railhint', 'Jours ' + ph.jours[0] + ' à ' + ph.jours[1] + ' · faites défiler');
+    updateArrows();
+  }
+  function updateArrows(){
+    var atStart = rail.scrollLeft < 10, atEnd = rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 10;
+    $('hy-prev').disabled = atStart && curPhase === 0; $('hy-next').disabled = atEnd && curPhase === PHASES.length - 1;
+  }
+  phasesEl.innerHTML = PHASES.map(function(p, i){ return '<span role="button" tabindex="0">' + p.nom + '</span>'; }).join('');
+  phasesEl.querySelectorAll('span').forEach(function(s, i){ s.addEventListener('click', function(){ showPhase(i); }); });
+  $('hy-next').addEventListener('click', function(){
+    if (rail.scrollLeft + rail.clientWidth >= rail.scrollWidth - 10) { if (curPhase < PHASES.length - 1) showPhase(curPhase + 1); }
+    else rail.scrollBy({ left: 212, behavior: 'smooth' });
+  });
+  $('hy-prev').addEventListener('click', function(){
+    if (rail.scrollLeft < 10) { if (curPhase > 0) { showPhase(curPhase - 1); rail.scrollTo({ left: rail.scrollWidth }); } }
+    else rail.scrollBy({ left: -212, behavior: 'smooth' });
+  });
+  rail.addEventListener('scroll', updateArrows, { passive: true });
+  showPhase(0);
   txt('hy-j5', 'Le ' + fr(new Date(now.getTime() + (CFG.essai_jours - 2) * 864e5)));
   txt('hy-j8', 'Le ' + fr(new Date(now.getTime() + CFG.essai_jours * 864e5)));
   txt('hy-j8b', fr(new Date(now.getTime() + CFG.essai_jours * 864e5)));

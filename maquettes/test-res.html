@@ -1,7 +1,9 @@
 <!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Test res-poids</title>
 <style>body{margin:0;background:#fff}</style></head>
 <body>
-<div id="mount"></div>
+<div style="text-align:center;padding:18px 0 6px"><img src="https://d1yei2z3i6k35z.cloudfront.net/5753843/66282a0a72878_logo_hypnotyse1.png" alt="Hypnotyse" style="height:22px"></div>
+<!-- text-align:center imite le conteneur Systeme.io, qui centre tout par défaut -->
+<div id="mount" style="text-align:center"></div>
 <script>
 /* charge le bloc Systeme.io tel quel, comme le ferait la page, pour le vérifier en local */
 fetch('/systeme/res-poids.html').then(function(r){ return r.text(); }).then(function(html){
