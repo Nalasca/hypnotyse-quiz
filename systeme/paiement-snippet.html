@@ -1,0 +1,75 @@
+<!--
+  Hypnotyse · pages de paiement Systeme.io (annuel ET mensuel)
+  À coller dans un bloc "Code HTML" ajouté en bas de chaque page de paiement.
+
+  1. Pré-remplit l'email et le prénom à partir du sid présent dans l'URL
+     (récupérés via la RPC quiz_get : l'email ne passe jamais dans l'URL).
+     Corrige au passage le pré-remplissage du prénom du script existant, qui
+     s'affichait sans être réellement pris en compte par le formulaire.
+  2. Mesure le tunnel dans funnel_events : checkout_view à l'arrivée,
+     checkout_submit au clic sur le bouton de paiement (avec un simple
+     oui/non sur le numéro WhatsApp rempli, jamais le numéro lui-même).
+  Sans sid dans l'URL (visiteur venu d'ailleurs), le script ne fait rien.
+-->
+<script>
+(function(){
+  var SB  = 'https://ydyogdzwdudmuzbpsozz.supabase.co/rest/v1/rpc/';
+  var KEY = 'sb_publishable_W8FTMb_XDkEKO4XbRRB7CQ_YJEURUS-';
+
+  var q = new URLSearchParams(location.search);
+  var sid = q.get('sid') || '';
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(sid)) return;
+  var PAGE = /annuel/.test(location.pathname) ? 'checkout_annuel' : 'checkout_mensuel';
+
+  function rpc(name, body, keepalive){
+    return fetch(SB + name, {
+      method: 'POST', keepalive: !!keepalive,
+      headers: { 'apikey': KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  }
+  function track(event, meta, keepalive){
+    try { rpc('funnel_track', { p_sid: sid, p_event: event, p_page: PAGE, p_meta: meta || {} }, keepalive).catch(function(){}); } catch(e){}
+  }
+  track('checkout_view');
+
+  /* Le formulaire Systeme.io est en React : modifier .value ne suffit pas,
+     il faut passer par le setter natif et remettre à zéro le suivi interne
+     de React pour qu'il enregistre vraiment la valeur. */
+  function setVal(input, v){
+    var tracker = input._valueTracker; if (tracker) tracker.setValue('');
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, v);
+    input.dispatchEvent(new Event('input',  { bubbles: true }));
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  function cap(s){ s = String(s || '').trim(); return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function fill(d){
+    var prenom = cap(d.prenom || q.get('prenom'));
+    var email  = String(d.email || '').trim();
+    var n = 0;
+    (function go(){
+      var em = document.querySelector('input[name="email"]');
+      var fn = document.querySelector('input[name="first_name"]');
+      if ((!em || !fn) && n++ < 30) { setTimeout(go, 300); return; }
+      if (em && email && !em.value) setVal(em, email);
+      /* le prénom peut déjà être affiché par l'ancien script sans être enregistré :
+         on le réécrit s'il est vide ou identique, jamais si la personne l'a modifié */
+      if (fn && prenom && (!fn.value || fn.value.toLowerCase() === prenom.toLowerCase())) setVal(fn, prenom);
+    })();
+  }
+  rpc('quiz_get', { p_id: sid })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){ fill(d || {}); })
+    .catch(function(){ fill({}); });
+
+  var sent = false;
+  document.addEventListener('click', function(e){
+    var b = e.target && e.target.closest ? e.target.closest('button[type="submit"]') : null;
+    if (!b || sent || /appliquer/i.test(b.innerText)) return;
+    sent = true;
+    var tel = document.querySelector('input[type="tel"]');
+    track('checkout_submit', { whatsapp: !!(tel && tel.value.replace(/\D/g, '').length >= 8) }, true);
+  }, true);
+})();
+</script>
